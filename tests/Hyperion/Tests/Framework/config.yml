@@ -1,0 +1,29 @@
+parameters:
+    test:
+        string: 'this is a string'
+        integer: 10
+        boolean: false
+        nested:
+            array: [ 'a', 'b', 'c' ]
+
+services:
+    test.service:
+        class: '\Hyperion\Tests\Framework\Resources\Services\TestService'
+        arguments: [ '%test%' ]
+
+    test.dependency:
+        class: '\Hyperion\Tests\Framework\Resources\Services\TestDependency'
+        arguments: [ '%test%', '@test.service' ]
+
+    test.circular:
+        class: '\Hyperion\Tests\Framework\Resources\Services\TestDependency'
+        arguments: [ '%test%', '@test.circular' ]
+
+    test.param:
+        class: '\Hyperion\Tests\Framework\Resources\Services\TestService'
+        arguments: [ 'blahh' ]
+
+    test.class:
+        class: '\Hyperion\Tests\Framework\Resources\Services\DoesntExist'
+        arguments: [ '%test%' ]
+
