@@ -1,15 +1,10 @@
 <?php
 
-
 namespace Hyperion\Framework\Tests\Command;
-
 
 use Hyperion\Tests\Workflow\WorkflowApplicationTestCase;
 use Hyperion\Workflow\Command\DeciderCommand;
-use Hyperion\Workflow\Command\WorkerCommand;
-use Hyperion\Workflow\Engine\WorkflowApplication;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 class DeciderCommandTestWorkflow extends WorkflowApplicationTestCase
@@ -34,4 +29,3 @@ class DeciderCommandTestWorkflow extends WorkflowApplicationTestCase
     }
 
 }
- 

@@ -6,6 +6,8 @@ use Hyperion\Framework\Engine\Application;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
+    const ENV = 'test';
+
     /**
      * @var Application
      */
@@ -16,7 +18,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         Application::setAppDir(__DIR__.'/..');
-        $this->app = new Application();
+        $this->app = new Application(self::ENV);
         $this->app->rebuildContainer();
 
     }

@@ -26,7 +26,7 @@ class BundleTest extends ApplicationTestCase
         $this->assertCount(1, Application::getBundles());
 
         // Test for any exceptions with this
-        $app = new Application();
+        $app = new Application(self::ENV);
         $app->rebuildContainer();
     }
 

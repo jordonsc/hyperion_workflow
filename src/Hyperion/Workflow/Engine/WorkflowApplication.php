@@ -7,6 +7,4 @@ class WorkflowApplication extends Application
 {
     const APPLICATION_NAME    = 'Hyperion Workflow';
     const APPLICATION_VERSION = '0.0.1';
-
-
 } 

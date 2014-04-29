@@ -28,7 +28,7 @@ class ApplicationCommandTest extends ApplicationTestCase
     public function testValidAbstraction()
     {
         Application::setAppDir(__DIR__.'/..');
-        $app = new Application();
+        $app = new Application(self::ENV);
         $app->rebuildContainer();
 
         $command = new TestCommand();

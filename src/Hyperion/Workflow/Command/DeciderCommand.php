@@ -2,6 +2,7 @@
 
 namespace Hyperion\Workflow\Command;
 
+use Hyperion\Database\Services\HyperionDataProvider;
 use Hyperion\Framework\Command\ApplicationCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,6 +19,10 @@ class DeciderCommand extends ApplicationCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("I am a decider.");
+
+        /** @var $db HyperionDataProvider */
+        $db = $this->getService('hyperion.data');
+        var_dump($db->getConfig());
 
     }
 

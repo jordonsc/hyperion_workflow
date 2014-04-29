@@ -63,7 +63,7 @@ class Application extends ConsoleApplication implements ContainerAwareInterface
         $container = new ContainerBuilder();
 
         $loader = new YamlFileLoader($container, new FileLocator(static::getAppDir()));
-        $loader->load('config.yml');
+        $loader->load('config_'.$this->env.'.yml');
 
         $this->setContainer($container);
         $this->loadBundles();

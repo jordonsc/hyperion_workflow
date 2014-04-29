@@ -6,6 +6,8 @@ use Hyperion\Framework\Engine\Application;
 
 abstract class ApplicationTestCase extends \PHPUnit_Framework_TestCase
 {
+    const ENV = 'test';
+
     protected static $app = null;
 
     /**
@@ -20,7 +22,7 @@ abstract class ApplicationTestCase extends \PHPUnit_Framework_TestCase
         Application::setBundles([]);
 
         if (static::$app === null) {
-            static::$app = new Application('test', true);
+            static::$app = new Application(self::ENV, true);
         }
 
         return static::$app;

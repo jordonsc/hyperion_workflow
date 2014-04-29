@@ -1,0 +1,11 @@
+imports:
+    - { resource: config.yml }
+
+parameters:
+    # For the Hyperion data-provider
+    hyperion.database:
+        driver:     pdo_mysql
+        host:       127.0.0.1
+        dbname:     hyperion_workflow
+        user:       root
+        password:

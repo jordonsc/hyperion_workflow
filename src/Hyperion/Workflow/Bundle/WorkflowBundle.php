@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Hyperion\Workflow;
+namespace Hyperion\Workflow\Bundle;
 
 
 use Hyperion\Framework\Engine\Application;
@@ -13,7 +13,7 @@ class WorkflowBundle implements BundleInterface
 {
     public function init(Application &$application)
     {
-        $application->importConfig(__DIR__.'/Resources/config.yml');
+        $application->importConfig(__DIR__.'/../Resources/config.yml');
         $application->add(new DeciderCommand());
         $application->add(new WorkerCommand());
     }
