@@ -1,9 +1,0 @@
-services:
-    hyperion.data.entity_manager:
-        class:          \Doctrine\ORM\EntityManager\EntityManager
-        factory_class:  \Hyperion\Database\Services\DoctrineFactory
-        factory_method: get
-        arguments: [ %hyperion.database% ]
-    hyperion.data:
-        class: \Hyperion\Database\Services\HyperionDataProvider
-        arguments: [ @hyperion.data.entity_manager ]

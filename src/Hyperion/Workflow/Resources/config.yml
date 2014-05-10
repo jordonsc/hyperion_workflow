@@ -1,1 +1,6 @@
 services:
+    hyperion.dbal:
+        class: Hyperion\Dbal\DataManager
+        factory_class: Hyperion\Workflow\Factory\DataManagerFactory
+        factory_method: get
+        arguments: [ %hyperion.dbal% ]

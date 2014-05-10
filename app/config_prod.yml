@@ -2,4 +2,5 @@ imports:
     - { resource: config.yml }
 
 parameters:
-    hyperion.database:
+    hyperion.dbal:
+        hostname:  api.hyperion.dev

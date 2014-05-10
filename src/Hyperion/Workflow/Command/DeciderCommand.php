@@ -2,7 +2,8 @@
 
 namespace Hyperion\Workflow\Command;
 
-use Hyperion\Database\Services\HyperionDataProvider;
+use Hyperion\Dbal\DataManager;
+use Hyperion\Dbal\Entity\Project;
 use Hyperion\Framework\Command\ApplicationCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,9 +21,14 @@ class DeciderCommand extends ApplicationCommand
     {
         $output->writeln("I am a decider.");
 
-        /** @var $db HyperionDataProvider */
-        $db = $this->getService('hyperion.data');
-        var_dump($db->getConfig());
+        /** @var DataManager $dbal */
+        $dbal = $this->getService('hyperion.dbal');
+
+        $project = new Project();
+        $project->setName("Decider test");
+        $dbal->create($project);
+
+
 
     }
 
