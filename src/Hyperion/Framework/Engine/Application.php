@@ -4,6 +4,7 @@ namespace Hyperion\Framework\Engine;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,6 +53,14 @@ class Application extends ConsoleApplication implements ContainerAwareInterface
 
         parent::__construct(static::APPLICATION_NAME, static::APPLICATION_VERSION);
 
+        $this->getDefinition()->addOption(
+            new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $env)
+        );
+
+        $this->getDefinition()->addOption(
+            new InputOption('--no-debug', null, InputOption::VALUE_NONE, 'Switches off debug mode.')
+        );
+
         $this->rebuildContainer();
     }
 
@@ -94,18 +103,6 @@ class Application extends ConsoleApplication implements ContainerAwareInterface
     }
 
     /**
-     * Set debug mode
-     *
-     * @param boolean $debug
-     * @return Application
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = $debug;
-        return $this;
-    }
-
-    /**
      * Get debug mode
      *
      * @return boolean
@@ -113,18 +110,6 @@ class Application extends ConsoleApplication implements ContainerAwareInterface
     public function getDebug()
     {
         return $this->debug;
-    }
-
-    /**
-     * Set application environment
-     *
-     * @param string $env
-     * @return Application
-     */
-    public function setEnvironment($env)
-    {
-        $this->env = $env;
-        return $this;
     }
 
     /**
