@@ -1,1 +1,4 @@
+imports:
+    - { resource: parameters.yml }
+
 parameters:

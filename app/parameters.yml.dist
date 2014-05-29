@@ -1,0 +1,6 @@
+parameters:
+    hyperion.workflow:
+        key:
+        secret:
+        region: ap-southeast-2
+        domain: hyperion_dev
