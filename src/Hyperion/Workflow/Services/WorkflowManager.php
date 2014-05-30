@@ -32,33 +32,17 @@ class WorkflowManager
         $this->swf    = $this->aws->get('swf');
     }
 
-    /**
-     * Create a new SWF workflow execution
-     *
-     * @param string $workflow_id      Workflow ID
-     * @param string $input            Workflow input
-     * @param int    $workflow_timeout Workflow timeout in seconds
-     * @param int    $task_timeout     Default task timeout in seconds
-     */
-    protected function createWorkflow($workflow_id, $input, $workflow_timeout = 3600, $task_timeout = 300)
+    public function getDecisionTask()
     {
-        $this->swf->startWorkflowExecution(
-            [
-                'domain'                       => $this->config['domain'],
-                'workflowId'                   => $workflow_id,
-                'workflowType'                 => [
-                    'name'    => self::WORKFLOW_NAME,
-                    'version' => self::WORKFLOW_VERSION,
-                ],
-                'taskList'                     => [
+        $task = $this->swf->pollForDecisionTask([
+                'domain' => $this->config['domain'],
+                'taskList' => array(
                     'name' => self::TASKLIST,
-                ],
-                'input'                        => $input,
-                'executionStartToCloseTimeout' => (string)$workflow_timeout,
-                'taskStartToCloseTimeout'      => (string)$task_timeout,
-                'childPolicy'                  => 'TERMINATE',
-            ]
-        );
+                ),
+                'identity' => 'Hyperion Workflow Decider',
+            ]);
+
+        return $task;
     }
 
 }

@@ -4,6 +4,6 @@ services:
         factory_class: Hyperion\Workflow\Factory\DataManagerFactory
         factory_method: get
         arguments: [ %hyperion.dbal% ]
-     hyperion.workflow_manager:
+    hyperion.workflow_manager:
         class: Hyperion\Workflow\Services\WorkflowManager
         arguments: [ %hyperion.workflow% ]

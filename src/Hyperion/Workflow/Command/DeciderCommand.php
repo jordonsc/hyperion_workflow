@@ -2,34 +2,40 @@
 
 namespace Hyperion\Workflow\Command;
 
-use Hyperion\Dbal\DataManager;
-use Hyperion\Dbal\Entity\Project;
 use Hyperion\Framework\Command\ApplicationCommand;
+use Hyperion\Framework\Utility\AbortTrait;
+use Hyperion\Framework\Utility\CommandLoggerTrait;
+use Hyperion\Workflow\Services\WorkflowManager;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DeciderCommand extends ApplicationCommand
+class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+    use AbortTrait;
+    use CommandLoggerTrait;
 
     protected function configure()
     {
-        $this->setName('run:decider')->setDescription('Spawn a decider');
+        $this->configureInput()->setName('run:decider')->setDescription('Process a single decision task');
     }
 
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("I am a decider.");
+        $this->initLogger($input);
+        $this->setupAbortIntercepts();
 
-        /** @var DataManager $dbal */
-        $dbal = $this->getService('hyperion.dbal');
+        /** @var WorkflowManager $wfm */
+        $wfm = $this->getService('hyperion.workflow_manager');
 
-        $project = new Project();
-        $project->setName("Decider test");
-        $dbal->create($project);
-
-
+        $this->debug("Polling for decision");
+        $task = $wfm->getDecisionTask();
+        var_dump($task);
 
     }
 
-} 
+}
