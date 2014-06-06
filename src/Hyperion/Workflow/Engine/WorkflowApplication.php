@@ -6,5 +6,5 @@ use Hyperion\Framework\Engine\Application;
 class WorkflowApplication extends Application
 {
     const APPLICATION_NAME    = 'Hyperion Workflow';
-    const APPLICATION_VERSION = '0.0.1';
+    const APPLICATION_VERSION = '1.0.0';
 } 

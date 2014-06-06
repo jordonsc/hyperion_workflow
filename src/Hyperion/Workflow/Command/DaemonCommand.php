@@ -27,7 +27,11 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
     protected function configure()
     {
         $this->configureInput()->setName('daemon')->setDescription('Run a workflow listener as a daemon')
-            ->addArgument("daemon", InputArgument::REQUIRED, "Workflow task to daemonise [".join('|', $this->daemons)."]");
+            ->addArgument(
+                "daemon",
+                InputArgument::REQUIRED,
+                "Workflow task to daemonise [".join('|', $this->daemons)."]"
+            );
     }
 
 
@@ -36,6 +40,7 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
         $this->initLogger($input);
         $daemon = $input->getArgument('daemon');
 
+        // Check we have a valid workflow command
         if (!in_array($daemon, $this->daemons)) {
             $err = "Unknown daemon: ".$daemon." - options: ".join(', ', $this->daemons);
             $output->writeln("<error>".$err."</error>");
@@ -44,12 +49,18 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
         }
 
         $this->log(LogLevel::INFO, "-- Daemon for [".$daemon."] started --");
+
+        // Warn the user if ctrl+c is dangerous (OS/env dependant)
         if ($this->setupAbortIntercepts()) {
             $this->log(LogLevel::INFO, "Use ctrl+c to gracefully abort after polling");
         } else {
-            $this->log(LogLevel::NOTICE, "Signal intercepts not available - cannot gracefully abort");
+            $this->log(
+                LogLevel::NOTICE,
+                "Signal intercepts not available, cannot gracefully abort - see docs/AbortingWorkflowDaemons.md"
+            );
         }
 
+        // Prep the execution command
         $bin = $_SERVER['SCRIPT_NAME'].' run:'.$daemon;
         if ($access = $input->getOption('access')) {
             $bin .= ' -l '.$access;
@@ -58,8 +69,9 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
             }
         }
 
+        // Loop until ctrl+c hit
         do {
-            $output     = [];
+            $output = [];
             $return_var = 0;
             exec($bin, $output, $return_var);
 
@@ -71,6 +83,8 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
             $this->checkSignals();
         } while (!$this->abort);
 
+        // $this->abort_signal should always be 2 (SIGINT)
+        // We'll keep SIGTSTP (20, invoked by ctrl+z) open so the user can insta-kill if required
         $this->log(LogLevel::INFO, "Kill signal caught (".$this->abort_signal."), aborting gracefully");
     }
 

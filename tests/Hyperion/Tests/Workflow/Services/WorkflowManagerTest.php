@@ -9,7 +9,7 @@ class WorkflowManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testStuff()
     {
-        $this->fail('Test not implemented');
+        $this->markTestSkipped('Test not implemented');
     }
 
 }

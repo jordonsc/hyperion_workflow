@@ -5,10 +5,10 @@ namespace Hyperion\Workflow\Command;
 use Hyperion\Framework\Command\ApplicationCommand;
 use Hyperion\Framework\Utility\AbortTrait;
 use Hyperion\Framework\Utility\CommandLoggerTrait;
+use Hyperion\Workflow\Entity\WorkflowTask;
 use Hyperion\Workflow\Services\WorkflowManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -34,7 +34,14 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
 
         $this->debug("Polling for decision");
         $task = $wfm->getDecisionTask();
-        var_dump($task);
+
+        if ($task) {
+            $this->debug(
+                "Found task '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.$task->getWorkflowVersion().
+                ') for action '.$task->getActionId()
+            );
+        }
+
 
     }
 
