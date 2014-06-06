@@ -5,10 +5,12 @@ use Aws\Common\Aws;
 use Aws\Swf\SwfClient;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
+use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\StackManager;
 use Hyperion\Workflow\Entity\WorkflowTask;
+use Hyperion\Workflow\Entity\WorkTask;
 
-class WorkflowManager
+class WorkManager
 {
     const WORKFLOW_NAME    = 'std_action';
     const WORKFLOW_VERSION = '1.0.0';
@@ -50,21 +52,23 @@ class WorkflowManager
     }
 
     /**
-     * Get a decision task
+     * Get a work task
      *
-     * @return WorkflowTask|null
+     * @return WorkTask|null
      */
-    public function getDecisionTask()
+    public function getWorkTask()
     {
-        $task = WorkflowTask::fromGuzzleModel($this->swf->pollForDecisionTask(
-            [
-                'domain'   => $this->config['domain'],
-                'taskList' => array(
-                    'name' => self::TASKLIST,
-                ),
-                'identity' => 'Hyperion Workflow Decider',
-            ]
-        ));
+        $task = WorkTask::fromGuzzleModel(
+            $this->swf->pollForActivityTask(
+                [
+                    'domain'   => $this->config['domain'],
+                    'taskList' => array(
+                        'name' => self::TASKLIST,
+                    ),
+                    'identity' => 'Hyperion Workflow Decider',
+                ]
+            )
+        );
 
         if ($task) {
             $task->setAction($this->getActionForTask($task));
@@ -80,27 +84,9 @@ class WorkflowManager
      * @param WorkflowTask $task
      * @return Action
      */
-    protected function getActionForTask(WorkflowTask $task) {
-
-    }
-
-
-    public function completeAction(WorkflowTask $task)
+    protected function getActionForTask(WorkflowTask $task)
     {
-        // TODO: Close the workflow via SWF
-        // TODO: Update action record via DBAL
-    }
-
-    public function failAction(WorkflowTask $task, $reason)
-    {
-        // TODO: Close the workflow via SWF
-        // TODO: Update action record via DBAL
-    }
-
-    public function timeoutAction(WorkflowTask $task)
-    {
-        // TODO: Close the workflow via SWF
-        // TODO: Update action record via DBAL
+        return $task->getActionId() ? $this->dm->retrieve(Entity::ACTION(), $task->getActionId()) : null;
     }
 
 

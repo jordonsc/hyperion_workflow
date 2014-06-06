@@ -6,9 +6,10 @@ use Hyperion\Framework\Command\ApplicationCommand;
 use Hyperion\Framework\Utility\AbortTrait;
 use Hyperion\Framework\Utility\CommandLoggerTrait;
 use Hyperion\Workflow\Entity\WorkflowTask;
-use Hyperion\Workflow\Services\WorkflowManager;
+use Hyperion\Workflow\Services\DecisionManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,20 +29,49 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
     {
         $this->initLogger($input);
         $this->setupAbortIntercepts();
+        $task = null;
 
-        /** @var WorkflowManager $wfm */
-        $wfm = $this->getService('hyperion.workflow_manager');
+        /** @var DecisionManager $dm */
+        $dm = $this->getService('hyperion.decision_manager');
+        $dm->setLogger($this->logger);
 
-        $this->debug("Polling for decision");
-        $task = $wfm->getDecisionTask();
+        try {
+            // Poll and process a task
+            $this->debug("Polling for decision");
+            $task = $dm->getDecisionTask();
 
-        if ($task) {
-            $this->debug(
-                "Found task '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.$task->getWorkflowVersion().
-                ') for action '.$task->getActionId()
+            if ($task) {
+                $this->debug(
+                    "Found task '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.
+                    $task->getWorkflowVersion().
+                    ') for action '.$task->getActionId()
+                );
+
+                $dm->processDecisionTask($task);
+            }
+
+        } catch (\Exception $e) {
+            // Error during task processing - log and fail the task
+            $this->log(
+                LogLevel::CRITICAL,
+                "Exception: ".$e->getMessage(),
+                [
+                    'File: '.$e->getFile(),
+                    'Line: '.$e->getLine(),
+                    'Code: '.$e->getCode(),
+                    'Trace: '.$e->getTraceAsString(),
+                ]
             );
-        }
 
+            if ($task) {
+                try {
+                    $dm->respondFailed($task, "Exception: ".$e->getMessage());
+                    $this->log(LogLevel::INFO, "Task '".$task->getExecutionId()."' failed due to internal errors");
+                } catch (\Exception $fe) {
+                    $this->log(LogLevel::ERROR, "Failed to fail task: ".$fe->getMessage());
+                }
+            }
+        }
 
     }
 

@@ -4,8 +4,13 @@ namespace Hyperion\Workflow\Entity;
 use Guzzle\Service\Resource\Model;
 use Hyperion\Dbal\Entity\Action;
 
-class WorkflowTask
+abstract class WorkflowTask
 {
+
+    /**
+     * @var string
+     */
+    protected $token;
 
     /**
      * @var int
@@ -41,6 +46,28 @@ class WorkflowTask
      * @var Action
      */
     protected $action;
+
+    /**
+     * Set Token
+     *
+     * @param string $token
+     * @return $this
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * Get Token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
 
     /**
      * Set ActionId
@@ -204,13 +231,15 @@ class WorkflowTask
      * @return WorkflowTask|null
      */
     public static function fromGuzzleModel(Model $model) {
-        $task = new self();
+        /** @var WorkflowTask $task */
+        $task = new static();
         $task->setStartedEventId($model->get('startedEventId'));
 
         if ($task->getStartedEventId() == 0) {
             return null;
         }
 
+        $task->setToken($model->get('taskToken'));
         $task->setWorkflowName($model->get('workflowType')['name']);
         $task->setWorkflowVersion($model->get('workflowType')['version']);
         $task->setExecutionId($model->get('workflowExecution')['workflowId']);

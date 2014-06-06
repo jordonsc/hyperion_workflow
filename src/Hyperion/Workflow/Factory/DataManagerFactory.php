@@ -2,17 +2,17 @@
 namespace Hyperion\Workflow\Factory;
 
 use Hyperion\Dbal\DataManager;
-use Hyperion\Dbal\Driver\ApiDriver;
+use Hyperion\Dbal\Driver\ApiDataDriver;
 
 /**
- * Create a Hyperion DBAL Manager
+ * Create a Hyperion Data Manager
  */
 class DataManagerFactory
 {
 
     public static function get($config)
     {
-        $driver = new ApiDriver($config['hostname']);
+        $driver = new ApiDataDriver($config['hostname']);
         return new DataManager($driver);
     }
 

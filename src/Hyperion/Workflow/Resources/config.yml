@@ -1,9 +1,17 @@
 services:
-    hyperion.dbal:
+    hyperion.data_manager:
         class: Hyperion\Dbal\DataManager
         factory_class: Hyperion\Workflow\Factory\DataManagerFactory
         factory_method: get
         arguments: [ %hyperion.dbal% ]
-    hyperion.workflow_manager:
-        class: Hyperion\Workflow\Services\WorkflowManager
-        arguments: [ %hyperion.workflow% ]
+    hyperion.stack_manager:
+        class: Hyperion\Dbal\StackManager
+        factory_class: Hyperion\Workflow\Factory\StackManagerFactory
+        factory_method: get
+        arguments: [ %hyperion.dbal% ]
+    hyperion.decision_manager:
+        class: Hyperion\Workflow\Services\DecisionManager
+        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager' ]
+    hyperion.work_manager:
+        class: Hyperion\Workflow\Services\DecisionManager
+        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager' ]
