@@ -8,6 +8,7 @@ use Hyperion\Framework\Engine\Application;
 use Hyperion\Framework\Engine\BundleInterface;
 use Hyperion\Workflow\Command\DeciderCommand;
 use Hyperion\Workflow\Command\DaemonCommand;
+use Hyperion\Workflow\Command\FlushCommand;
 use Hyperion\Workflow\Command\WorkerCommand;
 
 class WorkflowBundle implements BundleInterface
@@ -18,5 +19,6 @@ class WorkflowBundle implements BundleInterface
         $application->add(new DaemonCommand());
         $application->add(new DeciderCommand());
         $application->add(new WorkerCommand());
+        $application->add(new FlushCommand());
     }
 } 

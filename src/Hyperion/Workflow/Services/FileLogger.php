@@ -36,7 +36,6 @@ class FileLogger extends AbstractLogger
             // Access + error logs
             if ($level === LogLevel::INFO || $level === LogLevel::DEBUG) {
                 fwrite($this->access, $msg);
-
             } else {
                 fwrite($this->error, $msg);
             }

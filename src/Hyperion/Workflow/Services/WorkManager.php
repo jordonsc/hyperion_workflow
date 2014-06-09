@@ -3,18 +3,21 @@ namespace Hyperion\Workflow\Services;
 
 use Aws\Common\Aws;
 use Aws\Swf\SwfClient;
-use Hyperion\Dbal\DataManager;
-use Hyperion\Dbal\Entity\Action;
-use Hyperion\Dbal\Enum\Entity;
-use Hyperion\Dbal\StackManager;
-use Hyperion\Workflow\Entity\WorkflowTask;
 use Hyperion\Workflow\Entity\WorkTask;
+use Hyperion\Workflow\Exception\CommandFailedException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LogLevel;
 
-class WorkManager
+class WorkManager implements LoggerAwareInterface
 {
-    const WORKFLOW_NAME    = 'std_action';
-    const WORKFLOW_VERSION = '1.0.0';
-    const TASKLIST         = 'action_worker';
+    const IDENTITY = 'Hyperion Workflow Worker';
+    use LoggerAwareTrait;
+
+    /**
+     * @var array
+     */
+    protected $swf_config;
 
     /**
      * @var array
@@ -32,23 +35,17 @@ class WorkManager
     protected $swf;
 
     /**
-     * @var DataManager
+     * @var CommandManager
      */
-    protected $dm;
+    protected $command_driver;
 
-    /**
-     * @var StackManager
-     */
-    protected $sm;
-
-
-    public function __construct(array $config, DataManager $dm, StackManager $sm)
+    public function __construct(array $swf_config, array $config, CommandManager $command_driver)
     {
-        $this->config = $config;
-        $this->aws    = Aws::factory($config);
-        $this->swf    = $this->aws->get('swf');
-        $this->dm     = $dm;
-        $this->sm     = $sm;
+        $this->swf_config     = $swf_config;
+        $this->config         = $config;
+        $this->aws            = Aws::factory($config);
+        $this->swf            = $this->aws->get('swf');
+        $this->command_driver = $command_driver;
     }
 
     /**
@@ -63,31 +60,74 @@ class WorkManager
                 [
                     'domain'   => $this->config['domain'],
                     'taskList' => array(
-                        'name' => self::TASKLIST,
+                        'name' => $this->swf_config['tasklist'],
                     ),
-                    'identity' => 'Hyperion Workflow Decider',
+                    'identity' => self::IDENTITY,
                 ]
             )
         );
-
-        if ($task) {
-            $task->setAction($this->getActionForTask($task));
-        }
-
 
         return $task;
     }
 
     /**
-     * Get the corresponding DBAL action
+     * Execute the WorkflowCommand of the WorkTask and respond accordingly
      *
-     * @param WorkflowTask $task
-     * @return Action
+     * @param WorkTask $task
      */
-    protected function getActionForTask(WorkflowTask $task)
+    public function processWorkTask(WorkTask $task)
     {
-        return $task->getActionId() ? $this->dm->retrieve(Entity::ACTION(), $task->getActionId()) : null;
+        try {
+            $this->command_driver->execute($task->getWorkflowCommand());
+            $this->respondSuccess($task);
+        } catch (CommandFailedException $e) {
+            $this->respondFailed($task, $e->getMessage());
+        }
     }
 
+    /**
+     * Mark an action/workflow as complete
+     *
+     * @param WorkTask $task
+     * @param string   $result
+     */
+    public function respondSuccess(WorkTask $task, $result = 'OK')
+    {
+        $this->log(LogLevel::DEBUG, "Activity ".$task->getExecutionId()." succeeded: ".$result);
+
+        $this->swf->respondActivityTaskCompleted(
+            [
+                'taskToken' => $task->getToken(),
+                'result'    => $result
+            ]
+        );
+    }
+
+    /**
+     * Mark an action/workflow as failed
+     *
+     * @param WorkTask $task
+     * @param string   $reason
+     */
+    public function respondFailed(WorkTask $task, $reason)
+    {
+        $this->log(LogLevel::ERROR, "Activity ".$task->getExecutionId()." failed: ".$reason);
+
+        $this->swf->respondActivityTaskFailed(
+            [
+                'taskToken' => $task->getToken(),
+                'reason'    => $reason
+            ]
+        );
+    }
+
+    protected function log($level, $message, $context = [])
+    {
+        if (!$this->logger) {
+            return;
+        }
+
+        $this->logger->log($level, $message, $context);
+    }
 
 }

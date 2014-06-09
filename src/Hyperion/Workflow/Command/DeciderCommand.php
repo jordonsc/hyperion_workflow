@@ -42,7 +42,7 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
 
             if ($task) {
                 $this->debug(
-                    "Found task '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.
+                    "Found decision '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.
                     $task->getWorkflowVersion().
                     ') for action '.$task->getActionId()
                 );
@@ -54,7 +54,7 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
             // Error during task processing - log and fail the task
             $this->log(
                 LogLevel::CRITICAL,
-                "Exception: ".$e->getMessage(),
+                "Decider Exception: ".$e->getMessage(),
                 [
                     'File: '.$e->getFile(),
                     'Line: '.$e->getLine(),
@@ -66,9 +66,9 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
             if ($task) {
                 try {
                     $dm->respondFailed($task, "Exception: ".$e->getMessage());
-                    $this->log(LogLevel::INFO, "Task '".$task->getExecutionId()."' failed due to internal errors");
+                    $this->log(LogLevel::ERROR, "Task '".$task->getExecutionId()."' failed due to internal errors");
                 } catch (\Exception $fe) {
-                    $this->log(LogLevel::ERROR, "Failed to fail task: ".$fe->getMessage());
+                    $this->log(LogLevel::CRITICAL, "Failed to fail task: ".$fe->getMessage());
                 }
             }
         }

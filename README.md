@@ -18,10 +18,21 @@ continuously poll for work.
 
 It's recommended to log the output, eg:
 
+    ./hyperiond daemon decider -l /var/log/hyperion.log
+    ./hyperiond daemon worker -l /var/log/hyperion.log
+
+or break up the log files -
+
     ./hyperiond daemon decider -l /var/log/hyperion/decider-access.log -L /var/log/hyperion/decider-error.log
     ./hyperiond daemon worker -l /var/log/hyperion/worker-access.log -L /var/log/hyperion/worker-error.log
 
 For details -
 
     ./hyperiond help daemon
+
+
+Bugs and Limitations
+--------------------
+
+ * Google credentials aren't supported
 

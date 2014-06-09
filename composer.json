@@ -23,6 +23,7 @@
         "aws/aws-sdk-php": "~2.6",
         "psr/log": "~1.0",
         "bravo3/cache": "~0.1",
+        "bravo3/cloud-controller": "~0.0@beta",
         "predis/predis": "~0.8",
         "incenteev/composer-parameter-handler": "~2.0"
     },
@@ -37,6 +38,7 @@
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ]
     },
+    "minimum-stability": "beta",
     "config": {
         "bin-dir": "bin",
         "preferred-install": "dist"

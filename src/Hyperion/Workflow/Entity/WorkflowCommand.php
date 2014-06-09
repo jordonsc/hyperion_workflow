@@ -6,6 +6,16 @@ class WorkflowCommand
     const DEFAULT_TIMEOUT = 300;
 
     /**
+     * @var int
+     */
+    protected $project;
+
+    /**
+     * @var int
+     */
+    protected $environment;
+
+    /**
      * @var string
      */
     protected $command;
@@ -29,14 +39,65 @@ class WorkflowCommand
      */
     protected $timeout;
 
-    function __construct($command, $params = [], $result_namespace = null, $timeout = self::DEFAULT_TIMEOUT)
-    {
+    function __construct(
+        $project,
+        $environment,
+        $command,
+        $params = [],
+        $result_namespace = null,
+        $timeout = self::DEFAULT_TIMEOUT
+    ) {
+        $this->project          = $project;
+        $this->environment      = $environment;
         $this->command          = $command;
         $this->params           = $params;
         $this->result_namespace = $result_namespace;
         $this->timeout          = $timeout;
     }
 
+    /**
+     * Set Environment
+     *
+     * @param int $environment
+     * @return $this
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+        return $this;
+    }
+
+    /**
+     * Get Environment
+     *
+     * @return int
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * Set Project
+     *
+     * @param int $project
+     * @return $this
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
+        return $this;
+    }
+
+    /**
+     * Get Project
+     *
+     * @return int
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
 
     /**
      * Set Command
@@ -134,10 +195,12 @@ class WorkflowCommand
     public function serialise()
     {
         $out = [
-            'c'  => $this->getCommand(),
-            'p'  => $this->getParams(),
-            'ns' => $this->getResultNamespace(),
-            'to' => $this->getTimeout(),
+            'prj'  => $this->getProject(),
+            'env'  => $this->getEnvironment(),
+            'cmd'  => $this->getCommand(),
+            'para' => $this->getParams(),
+            'ns'   => $this->getResultNamespace(),
+            'to'   => $this->getTimeout(),
         ];
 
         return json_encode($out);
@@ -152,10 +215,14 @@ class WorkflowCommand
     public static function deserialise($str)
     {
         $in  = json_decode($str, true);
-        $obj = new self(isset($in['c']) ? $in['c'] : null,
-            isset($in['p']) ? $in['p'] : null,
+        $obj = new static(
+            isset($in['prj']) ? $in['prj'] : null,
+            isset($in['env']) ? $in['env'] : null,
+            isset($in['cmd']) ? $in['cmd'] : null,
+            isset($in['para']) ? $in['para'] : null,
             isset($in['ns']) ? $in['ns'] : null,
-            isset($in['to']) ? $in['to'] : self::DEFAULT_TIMEOUT);
+            isset($in['to']) ? $in['to'] : self::DEFAULT_TIMEOUT
+        );
         return $obj;
     }
 

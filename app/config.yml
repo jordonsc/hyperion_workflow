@@ -2,3 +2,12 @@ imports:
     - { resource: parameters.yml }
 
 parameters:
+    swf:
+        # SWF workflow
+        workflow_name: std_action
+        workflow_version: 1.0.0
+        # A common activity is used for all commands
+        activity_name: action_worker
+        activity_version: 1.0.0
+        # Default task-list, for consistency this should have the same name as the activity
+        tasklist: action_worker

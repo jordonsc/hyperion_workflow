@@ -9,27 +9,24 @@ use Hyperion\Dbal\Entity\Action;
 use Hyperion\Dbal\Enum\ActionState;
 use Hyperion\Dbal\Enum\ActionType;
 use Hyperion\Dbal\Enum\Entity;
-use Hyperion\Dbal\StackManager;
 use Hyperion\Workflow\Entity\DecisionTask;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Entity\WorkflowTask;
 use Hyperion\Workflow\Enum\WorkflowResult;
 use Hyperion\Workflow\Exception\ParameterException;
-use Hyperion\Workflow\Exception\UnexpectedValueException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
 
 class DecisionManager implements LoggerAwareInterface
 {
-    const WORKFLOW_NAME    = 'std_action';
-    const WORKFLOW_VERSION = '1.0.0';
-    const ACTIVITY_NAME    = 'action_worker';
-    const ACTIVITY_VERSION = '1.0.0';
-    const TASKLIST         = 'action_worker';
-
+    const IDENTITY = 'Hyperion Workflow Decider';
     use LoggerAwareTrait;
 
+    /**
+     * @var array
+     */
+    protected $swf_config;
     /**
      * @var array
      */
@@ -51,22 +48,17 @@ class DecisionManager implements LoggerAwareInterface
     protected $dm;
 
     /**
-     * @var StackManager
-     */
-    protected $sm;
-
-    /**
      * @var PoolInterface
      */
     protected $cache_pool;
 
-    public function __construct(array $config, DataManager $dm, StackManager $sm, PoolInterface $cache_pool)
+    public function __construct(array $swf_config, array $config, DataManager $dm, PoolInterface $cache_pool)
     {
+        $this->swf_config = $swf_config;
         $this->config     = $config;
         $this->aws        = Aws::factory($config);
         $this->swf        = $this->aws->get('swf');
         $this->dm         = $dm;
-        $this->sm         = $sm;
         $this->cache_pool = $cache_pool;
     }
 
@@ -82,9 +74,9 @@ class DecisionManager implements LoggerAwareInterface
                 [
                     'domain'   => $this->config['domain'],
                     'taskList' => array(
-                        'name' => self::TASKLIST,
+                        'name' => $this->swf_config['tasklist'],
                     ),
-                    'identity' => 'Hyperion Workflow Decider',
+                    'identity' => self::IDENTITY,
                 ]
             )
         );
@@ -100,10 +92,10 @@ class DecisionManager implements LoggerAwareInterface
     /**
      * Get the corresponding DBAL action
      *
-     * @param WorkflowTask $task
+     * @param DecisionTask $task
      * @return Action
      */
-    protected function getActionForTask(WorkflowTask $task)
+    protected function getActionForTask(DecisionTask $task)
     {
         return $task->getActionId() ? $this->dm->retrieve(Entity::ACTION(), $task->getActionId()) : null;
     }
@@ -122,15 +114,14 @@ class DecisionManager implements LoggerAwareInterface
         }
 
         // TODO: look for failed activities!
-        // TODO: there is a race condition, another task could finish prompting a decision before another is reported as in-progress
-        // TODO: consider redis for keeping action history instead of the dbal
 
         switch ($action->getActionType()) {
             case ActionType::BAKE():
                 $decider = new BakeDecider($action, $this->cache_pool);
                 break;
             default:
-                throw new UnexpectedValueException("Unknown action type '".$action->getActionType()->value()."'");
+                $this->respondFailed($task, "Unknown action type (".$action->getActionType()->value().")");
+                return;
         }
 
         switch ($decider->getResult()) {
@@ -145,15 +136,13 @@ class DecisionManager implements LoggerAwareInterface
                 $this->respondComplete($task);
                 break;
 
-            // Unknown result, fail
+            // Failure in action
             default:
-
-                // Failure in action
             case WorkflowResult::FAIL():
                 $this->respondFailed($task, $decider->getReason());
                 break;
 
-            // Timeout
+            // Timeout (a decider should never really throw this one)
             case WorkflowResult::TIMEOUT():
                 $this->respondFailed($task, 'Timeout');
                 break;
@@ -181,13 +170,13 @@ class DecisionManager implements LoggerAwareInterface
                 'decisionType'                           => 'ScheduleActivityTask',
                 'scheduleActivityTaskDecisionAttributes' => [
                     'activityType'           => [
-                        'name'    => self::ACTIVITY_NAME,
-                        'version' => self::ACTIVITY_VERSION,
+                        'name'    => $this->swf_config['activity_name'],
+                        'version' => $this->swf_config['activity_version'],
                     ],
                     'activityId'             => $activity_id,
                     'input'                  => $command->serialise(),
                     'taskList'               => [
-                        'name' => self::TASKLIST,
+                        'name' => $this->swf_config['tasklist'],
                     ],
                     'scheduleToCloseTimeout' => (string)($command->getTimeout() + 300),
                     'heartbeatTimeout'       => (string)($command->getTimeout() + 300),

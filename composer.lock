@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "396e3a55201524f3939270834a523af1",
+    "hash": "2b34cda1178d9dbf68bbd457b648966f",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -123,6 +124,104 @@
                 "redis"
             ],
             "time": "2014-04-24 01:26:35"
+        },
+        {
+            "name": "bravo3/cloud-controller",
+            "version": "0.0.1-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bravo3/cloud-ctrl.git",
+                "reference": "f5322e9e04b32e485d110d3a7cc0b5c5405daac6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bravo3/cloud-ctrl/zipball/f5322e9e04b32e485d110d3a7cc0b5c5405daac6",
+                "reference": "f5322e9e04b32e485d110d3a7cc0b5c5405daac6",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~2.5",
+                "bravo3/cache": "~0.1",
+                "bravo3/network-proxy": "~1.1",
+                "eloquent/enumeration": "~5.1",
+                "google/apiclient": "1.0.*@beta",
+                "php": ">=5.4.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": [
+                        "src/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
+            "description": "A library to control cloud resources on AWS, Google Cloud and Windows Azure",
+            "keywords": [
+                "aws",
+                "azure",
+                "cloud",
+                "google cloud"
+            ],
+            "time": "2014-04-13 09:18:17"
+        },
+        {
+            "name": "bravo3/network-proxy",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bravo3/network-proxy.git",
+                "reference": "e2ac764b0f205cf5be13978bae8cad563f185fd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bravo3/network-proxy/zipball/e2ac764b0f205cf5be13978bae8cad563f185fd8",
+                "reference": "e2ac764b0f205cf5be13978bae8cad563f185fd8",
+                "shasum": ""
+            },
+            "require": {
+                "eloquent/enumeration": "~5.1",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
+            "description": "A set of PHP 5.3 interfaces that define a network proxy",
+            "keywords": [
+                "network",
+                "proxy"
+            ],
+            "time": "2014-04-09 07:27:34"
         },
         {
             "name": "bravo3/properties",
@@ -407,6 +506,43 @@
             "time": "2014-03-13 01:16:59"
         },
         {
+            "name": "google/apiclient",
+            "version": "1.0.4-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/google/google-api-php-client.git",
+                "reference": "eb5934d58761f1a8575e6df6de02fdce89dd89d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/eb5934d58761f1a8575e6df6de02fdce89dd89d2",
+                "reference": "eb5934d58761f1a8575e6df6de02fdce89dd89d2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "src/"
+            ],
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Client library for Google APIs",
+            "homepage": "http://developers.google.com/api-client-library/php",
+            "keywords": [
+                "google"
+            ],
+            "time": "2014-03-07 17:54:19"
+        },
+        {
             "name": "guzzle/guzzle",
             "version": "v3.9.1",
             "source": {
@@ -504,12 +640,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "5ed7330710a442593680c5aad54afc6c48d12c3d"
+                "reference": "0646de195760fe2749d05ad284d0ea6f4533f808"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/5ed7330710a442593680c5aad54afc6c48d12c3d",
-                "reference": "5ed7330710a442593680c5aad54afc6c48d12c3d",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/0646de195760fe2749d05ad284d0ea6f4533f808",
+                "reference": "0646de195760fe2749d05ad284d0ea6f4533f808",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +686,7 @@
                 "source": "https://github.com/jordonsc/hyperion_dbal/tree/master",
                 "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
             },
-            "time": "2014-06-09 01:52:45"
+            "time": "2014-06-09 10:45:31"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1920,9 +2056,10 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "stability-flags": {
-        "hyperion/dbal": 20
+        "hyperion/dbal": 20,
+        "bravo3/cloud-controller": 10
     },
     "platform": {
         "php": ">=5.4.0"

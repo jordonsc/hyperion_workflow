@@ -6,6 +6,7 @@ use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\BakeStage;
 use Hyperion\Workflow\Enum\CommandType;
+use Hyperion\Workflow\Enum\ApplicationEnvironment;
 use Hyperion\Workflow\Enum\WorkflowResult;
 
 class BakeDecider extends AbstractDecider implements DeciderInterface
@@ -46,35 +47,26 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     protected function processSpawning()
     {
-        $spawn_state = $this->getState(self::NS_INSTANCE.'.state', null);
-        $instance_ns = $this->getNsPrefix().self::NS_INSTANCE;
+        $instance_state = $this->getState(self::NS_INSTANCE.'.0.state', null);
 
         // Haven't created it yet
-        if ($spawn_state === null) {
-            // Spawn instance
-            $this->commands[] = new WorkflowCommand(CommandType::LAUNCH_INSTANCE, [], $instance_ns);
-            $this->setState(self::NS_INSTANCE.'.state', InstanceState::PENDING);
-            return WorkflowResult::COMMAND();
+        if ($instance_state === null) {
+            return $this->actionSpawnInstance();
         }
 
         // Wait for ready
-        switch ($spawn_state) {
+        switch ($instance_state) {
             // Waiting for instance to spawn
-            default:
             case InstanceState::PENDING:
             case InstanceState::STARTING:
-                $this->commands[] = new WorkflowCommand(
-                    CommandType::WAIT_CHECK_INSTANCE,
-                    ['delay' => self::CHECK_DELAY],
-                    $instance_ns);
-                return WorkflowResult::COMMAND();
+                return $this->actionCheckInstance();
 
             // Ready - start baking
             case InstanceState::RUNNING:
-                $this->commands[] = new WorkflowCommand(CommandType::BAKE_INSTANCE, [], $instance_ns);
-                return WorkflowResult::COMMAND();
+                return $this->actionBakeInstance();
 
             // These are all error cases at this stage of the process and shouldn't occur
+            default:
             case InstanceState::SHUTTING_DOWN:
             case InstanceState::TERMINATING:
             case InstanceState::STOPPED:
@@ -83,8 +75,66 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 return WorkflowResult::FAIL();
         }
 
-
     }
 
+    /**
+     * Spawn a new bakery instance
+     *
+     * @return WorkflowResult
+     */
+    protected function actionSpawnInstance()
+    {
+        $this->commands[] = new WorkflowCommand(
+            $this->action->getProject(),
+            ApplicationEnvironment::BAKERY,
+            CommandType::LAUNCH_INSTANCE,
+            [],
+            $this->getNsPrefix().self::NS_INSTANCE
+        );
+        $this->setState(self::NS_INSTANCE.'.0.state', InstanceState::PENDING);
+        return WorkflowResult::COMMAND();
+    }
 
-} 
+    /**
+     * Check an instance
+     *
+     * @return WorkflowResult
+     */
+    protected function actionCheckInstance()
+    {
+        $this->commands[] = new WorkflowCommand(
+            $this->action->getProject(),
+            ApplicationEnvironment::BAKERY,
+            CommandType::WAIT_CHECK_INSTANCE,
+            [
+                'delay'       => self::CHECK_DELAY,
+                'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
+            ],
+            $this->getNsPrefix().self::NS_INSTANCE
+        );
+        return WorkflowResult::COMMAND();
+    }
+
+    /**
+     * Kick off the bakery process
+     *
+     * @return WorkflowResult
+     */
+    protected function actionBakeInstance()
+    {
+        $this->commands[] = new WorkflowCommand(
+            $this->action->getProject(),
+            ApplicationEnvironment::BAKERY,
+            CommandType::BAKE_INSTANCE,
+            [
+                'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
+            ],
+            $this->getNsPrefix().self::NS_INSTANCE
+        );
+
+        $this->setState(self::NS_STAGE, BakeStage::BAKING);
+
+        return WorkflowResult::COMMAND();
+    }
+
+}

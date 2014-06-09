@@ -12,9 +12,12 @@ services:
         factory_class: Hyperion\Workflow\Factory\StackManagerFactory
         factory_method: get
         arguments: [ %hyperion.dbal% ]
+    hyperion.command_driver:
+        class: Hyperion\Workflow\Services\CommandManager
+        arguments: [ '@hyperion.data_manager', '@hyperion.cache_pool' ]
     hyperion.decision_manager:
         class: Hyperion\Workflow\Services\DecisionManager
-        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager', '@hyperion.cache_pool' ]
+        arguments: [ %swf%, %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.cache_pool' ]
     hyperion.work_manager:
         class: Hyperion\Workflow\Services\DecisionManager
-        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager' ]
+        arguments: [ %swf%, %hyperion.workflow%, '@hyperion.command_driver' ]

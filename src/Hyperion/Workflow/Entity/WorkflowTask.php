@@ -37,15 +37,6 @@ abstract class WorkflowTask
      */
     protected $runId;
 
-    /**
-     * @var int
-     */
-    protected $action_id;
-
-    /**
-     * @var Action
-     */
-    protected $action;
 
     /**
      * Set Token
@@ -67,28 +58,6 @@ abstract class WorkflowTask
     public function getToken()
     {
         return $this->token;
-    }
-
-    /**
-     * Set ActionId
-     *
-     * @param int $action_id
-     * @return $this
-     */
-    public function setActionId($action_id)
-    {
-        $this->action_id = $action_id;
-        return $this;
-    }
-
-    /**
-     * Get ActionId
-     *
-     * @return int
-     */
-    public function getActionId()
-    {
-        return $this->action_id;
     }
 
     /**
@@ -202,35 +171,12 @@ abstract class WorkflowTask
     }
 
     /**
-     * Set Action
-     *
-     * @param Action $action
-     * @return $this
-     */
-    public function setAction(Action $action)
-    {
-        $this->action = $action;
-        return $this;
-    }
-
-    /**
-     * Get Action
-     *
-     * @return Action
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-
-    /**
      * Create a new WorkflowTask from a Guzzle model
      *
      * @param Model $model
      * @return WorkflowTask|null
      */
-    public static function fromGuzzleModel(Model $model) {
+    protected static function fromGuzzleModel(Model $model) {
         /** @var WorkflowTask $task */
         $task = new static();
         $task->setStartedEventId($model->get('startedEventId'));
@@ -244,15 +190,6 @@ abstract class WorkflowTask
         $task->setWorkflowVersion($model->get('workflowType')['version']);
         $task->setExecutionId($model->get('workflowExecution')['workflowId']);
         $task->setRunId($model->get('workflowExecution')['runId']);
-
-        $events = $model->get('events');
-
-        foreach ($events as $event) {
-            if (isset($event['workflowExecutionStartedEventAttributes'])) {
-                $task->setActionId($event['workflowExecutionStartedEventAttributes']['input']);
-                break;
-            }
-        }
 
         return $task;
     }
