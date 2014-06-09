@@ -21,6 +21,10 @@ class WorkflowCommand
     protected $result_namespace;
 
     /**
+     * Start to close timeout in seconds
+     *
+     * This is for the workflow controller, the worker itself shouldn't need to worry about this
+     *
      * @var int
      */
     protected $timeout;

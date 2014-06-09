@@ -1,11 +1,15 @@
 <?php
 namespace Hyperion\Workflow\Services;
 
+use Bravo3\Cache\PoolInterface;
+use Hyperion\Dbal\Entity\Action;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\WorkflowResult;
 
 interface DeciderInterface
 {
+
+    function __construct(Action $action, PoolInterface $cache);
 
     /**
      * Get the action that should be taken

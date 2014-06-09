@@ -4,3 +4,6 @@ imports:
 parameters:
     hyperion.dbal:
         hostname:  api.hyperion.dev
+
+    # Workflow cache pool
+    hyperion.cache-pool: tcp://127.0.0.1:6379

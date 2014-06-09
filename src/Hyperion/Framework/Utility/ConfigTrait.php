@@ -1,5 +1,5 @@
 <?php
-namespace Hyperion\Workflow\Traits;
+namespace Hyperion\Framework\Utility;
 
 trait ConfigTrait
 {
@@ -47,6 +47,7 @@ trait ConfigTrait
             } elseif (!is_array($arr[$index])) {
                 $arr[$index] = [];
             }
+            $arr =& $arr[$index];
         }
 
         $arr[$final_key] = $value;

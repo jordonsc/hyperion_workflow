@@ -1,4 +1,7 @@
 services:
+    hyperion.cache_pool:
+        class: Bravo3\Cache\Redis\RedisCachePool
+        arguments: [ %hyperion.cache-pool% ]
     hyperion.data_manager:
         class: Hyperion\Dbal\DataManager
         factory_class: Hyperion\Workflow\Factory\DataManagerFactory
@@ -11,7 +14,7 @@ services:
         arguments: [ %hyperion.dbal% ]
     hyperion.decision_manager:
         class: Hyperion\Workflow\Services\DecisionManager
-        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager' ]
+        arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager', '@hyperion.cache_pool' ]
     hyperion.work_manager:
         class: Hyperion\Workflow\Services\DecisionManager
         arguments: [ %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager' ]

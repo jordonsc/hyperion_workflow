@@ -3,6 +3,7 @@ namespace Hyperion\Workflow\Services;
 
 use Aws\Common\Aws;
 use Aws\Swf\SwfClient;
+use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
 use Hyperion\Dbal\Enum\ActionState;
@@ -54,14 +55,19 @@ class DecisionManager implements LoggerAwareInterface
      */
     protected $sm;
 
+    /**
+     * @var PoolInterface
+     */
+    protected $cache_pool;
 
-    public function __construct(array $config, DataManager $dm, StackManager $sm)
+    public function __construct(array $config, DataManager $dm, StackManager $sm, PoolInterface $cache_pool)
     {
-        $this->config = $config;
-        $this->aws    = Aws::factory($config);
-        $this->swf    = $this->aws->get('swf');
-        $this->dm     = $dm;
-        $this->sm     = $sm;
+        $this->config     = $config;
+        $this->aws        = Aws::factory($config);
+        $this->swf        = $this->aws->get('swf');
+        $this->dm         = $dm;
+        $this->sm         = $sm;
+        $this->cache_pool = $cache_pool;
     }
 
     /**
@@ -121,7 +127,7 @@ class DecisionManager implements LoggerAwareInterface
 
         switch ($action->getActionType()) {
             case ActionType::BAKE():
-                $decider = new BakeDecider($action);
+                $decider = new BakeDecider($action, $this->cache_pool);
                 break;
             default:
                 throw new UnexpectedValueException("Unknown action type '".$action->getActionType()->value()."'");

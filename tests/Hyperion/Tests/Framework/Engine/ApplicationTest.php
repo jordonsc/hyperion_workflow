@@ -28,11 +28,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppProperties()
     {
-        $this->app->setEnvironment('prod');
-        $this->app->setDebug(true);   // set debug to true in prod?!
-
-        $this->assertEquals('prod', $this->app->getEnvironment());
-        $this->assertTrue($this->app->getDebug());
+        $this->assertEquals('test', $this->app->getEnvironment());
+        $this->assertFalse($this->app->getDebug());
 
         $this->assertEquals(self::DEFAULT_NAME, $this->app->getName());
     }
