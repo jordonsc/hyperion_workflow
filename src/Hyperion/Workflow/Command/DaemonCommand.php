@@ -77,7 +77,7 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
 
             // 0 for success, 2 for SIGINT caught and ignored until we're done
             if ($return_var !== 0 && $return_var !== 2) {
-                $this->log(LogLevel::ERROR, "Task execution error (".$return_var.")", $output);
+                $this->log(LogLevel::ERROR, $daemon.": execution error (".$return_var.")", $output);
             }
 
             $this->checkSignals();
@@ -85,7 +85,7 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
 
         // $this->abort_signal should always be 2 (SIGINT)
         // We'll keep SIGTSTP (20, invoked by ctrl+z) open so the user can insta-kill if required
-        $this->log(LogLevel::INFO, "Kill signal caught (".$this->abort_signal."), aborting gracefully");
+        $this->log(LogLevel::INFO, $daemon.": kill signal caught (".$this->abort_signal."), aborting gracefully");
     }
 
 }

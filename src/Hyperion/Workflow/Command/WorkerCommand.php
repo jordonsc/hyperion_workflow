@@ -40,12 +40,7 @@ class WorkerCommand extends ApplicationCommand implements LoggerAwareInterface
             $task = $wm->getWorkTask();
 
             if ($task) {
-                $this->debug(
-                    "Found job '".$task->getExecutionId()."' (".$task->getWorkflowName().'/'.
-                    $task->getWorkflowVersion().
-                    ') for action '.$task->getActionId()
-                );
-
+                $this->debug("Found job '".$task->getExecutionId()."': ".$task->getWorkflowCommand()->getCommand());
                 $wm->processWorkTask($task);
             }
 
@@ -53,12 +48,12 @@ class WorkerCommand extends ApplicationCommand implements LoggerAwareInterface
             // Error during task processing - log and fail the task
             $this->log(
                 LogLevel::CRITICAL,
-                "Worker Exception: ".$e->getMessage(),
+                "Worker exception: ".$e->getMessage(),
                 [
+                    'Exception: '.get_class($e),
                     'File: '.$e->getFile(),
                     'Line: '.$e->getLine(),
                     'Code: '.$e->getCode(),
-                    'Trace: '.$e->getTraceAsString(),
                 ]
             );
 

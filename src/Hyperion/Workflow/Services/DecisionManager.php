@@ -107,14 +107,20 @@ class DecisionManager implements LoggerAwareInterface
      */
     public function processDecisionTask(DecisionTask $task)
     {
-        $action = $task->getAction();
-
-        if (!$action) {
-            throw new ParameterException("Task does not have an associated action! Cannot process.");
+        // Check for activity failures
+        if ($task->hasFailed()) {
+            $this->respondFailed($task, join("; ", $task->getErrors()));
+            return;
         }
 
-        // TODO: look for failed activities!
+        // Get the DBAL action record, without this we can't do anything
+        $action = $task->getAction();
+        if (!$action) {
+            $this->respondFailed($task, "Task does not have an associated action! Cannot process.");
+            return;
+        }
 
+        // Each action type has it's own decider - build it
         switch ($action->getActionType()) {
             case ActionType::BAKE():
                 $decider = new BakeDecider($action, $this->cache_pool);
@@ -124,6 +130,7 @@ class DecisionManager implements LoggerAwareInterface
                 return;
         }
 
+        // The decider will work out what to do when calling #getResult(), respond accordingly
         switch ($decider->getResult()) {
             // Schedule new worker commands
             case WorkflowResult::COMMAND():
@@ -201,7 +208,7 @@ class DecisionManager implements LoggerAwareInterface
      */
     public function respondComplete(DecisionTask $task, $result = 'OK')
     {
-        $this->log(LogLevel::DEBUG, "Completing task ".$task->getExecutionId());
+        $this->log(LogLevel::DEBUG, "Completing execution ".$task->getExecutionId());
 
         // Close SWF task
         $this->swf->respondDecisionTaskCompleted(
@@ -230,7 +237,7 @@ class DecisionManager implements LoggerAwareInterface
      */
     public function respondFailed(DecisionTask $task, $reason)
     {
-        $this->log(LogLevel::DEBUG, "Failing task ".$task->getExecutionId().": ".$reason);
+        $this->log(LogLevel::DEBUG, "Failing execution ".$task->getExecutionId().": ".$reason);
 
         // Close SWF task
         $this->swf->respondDecisionTaskCompleted(
@@ -248,6 +255,7 @@ class DecisionManager implements LoggerAwareInterface
         // Update action record via DBAL
         $action = $task->getAction();
         $action->setState(ActionState::FAILED());
+        // TODO: save reason with the DBAL record
         $this->dm->update($action);
     }
 

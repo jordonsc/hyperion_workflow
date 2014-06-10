@@ -37,15 +37,15 @@ class WorkManager implements LoggerAwareInterface
     /**
      * @var CommandManager
      */
-    protected $command_driver;
+    protected $command_manager;
 
-    public function __construct(array $swf_config, array $config, CommandManager $command_driver)
+    public function __construct(array $swf_config, array $config, CommandManager $command_manager)
     {
-        $this->swf_config     = $swf_config;
-        $this->config         = $config;
-        $this->aws            = Aws::factory($config);
-        $this->swf            = $this->aws->get('swf');
-        $this->command_driver = $command_driver;
+        $this->swf_config      = $swf_config;
+        $this->config          = $config;
+        $this->aws             = Aws::factory($config);
+        $this->swf             = $this->aws->get('swf');
+        $this->command_manager = $command_manager;
     }
 
     /**
@@ -78,7 +78,7 @@ class WorkManager implements LoggerAwareInterface
     public function processWorkTask(WorkTask $task)
     {
         try {
-            $this->command_driver->execute($task->getWorkflowCommand());
+            $this->command_manager->execute($task->getWorkflowCommand());
             $this->respondSuccess($task);
         } catch (CommandFailedException $e) {
             $this->respondFailed($task, $e->getMessage());

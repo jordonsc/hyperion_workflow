@@ -5,7 +5,6 @@ namespace Hyperion\Workflow\Command;
 use Hyperion\Framework\Command\ApplicationCommand;
 use Hyperion\Framework\Utility\AbortTrait;
 use Hyperion\Framework\Utility\CommandLoggerTrait;
-use Hyperion\Workflow\Entity\WorkflowTask;
 use Hyperion\Workflow\Services\DecisionManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -54,12 +53,12 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
             // Error during task processing - log and fail the task
             $this->log(
                 LogLevel::CRITICAL,
-                "Decider Exception: ".$e->getMessage(),
+                "Decider exception: ".$e->getMessage(),
                 [
+                    'Exception: '.get_class($e),
                     'File: '.$e->getFile(),
                     'Line: '.$e->getLine(),
                     'Code: '.$e->getCode(),
-                    'Trace: '.$e->getTraceAsString(),
                 ]
             );
 

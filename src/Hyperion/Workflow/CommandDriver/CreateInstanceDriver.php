@@ -2,10 +2,10 @@
 namespace Hyperion\Workflow\CommandDriver;
 
 use Bravo3\CloudCtrl\Entity\Common\Zone;
+use Bravo3\CloudCtrl\Enum\InstanceState as CloudInstanceState;
 use Bravo3\CloudCtrl\Interfaces\Instance\InstanceInterface;
 use Bravo3\CloudCtrl\Schema\InstanceSchema;
 use Hyperion\Dbal\Enum\InstanceState;
-use Bravo3\CloudCtrl\Enum\InstanceState as CloudInstanceState;
 use Hyperion\Workflow\Exception\CommandFailedException;
 
 /**
@@ -43,7 +43,7 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
             if ($this->command->getResultNamespace()) {
                 $instance_index = 0;
                 foreach ($report->getInstances() as $instance) {
-                    $this->saveInstance($instance_index++, $instance);
+                    $this->saveInstanceReport($instance_index++, $instance);
                 }
             }
 
@@ -60,7 +60,7 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
      * @param int               $index
      * @param InstanceInterface $instance
      */
-    protected function saveInstance($index, InstanceInterface $instance)
+    protected function saveInstanceReport($index, InstanceInterface $instance)
     {
         $namespace = $this->command->getResultNamespace();
 

@@ -60,7 +60,7 @@ class CommandManager
         /** @var Project $project */
         $project = $this->getEntity(Entity::PROJECT(), $command->getProject());
         if (!$project) {
-            throw new CommandFailedException("Invalid project");
+            throw new CommandFailedException("Invalid or missing project");
         }
 
         /** @var Credential $credentials */
@@ -79,7 +79,7 @@ class CommandManager
         }
 
         if (!$credentials) {
-            throw new CommandFailedException("Invalid credentials");
+            throw new CommandFailedException("Invalid or missing credentials");
         }
 
         // Find the appropriate action function and execute
@@ -101,7 +101,7 @@ class CommandManager
     {
         switch ($command->getCommand()) {
             default:
-                throw new CommandFailedException("Unknown command");
+                throw new CommandFailedException("Unknown command (".$command->getCommand().")");
             case CommandType::LAUNCH_INSTANCE:
                 return new CreateInstanceDriver($command, $service, $project, $this->pool);
         }
@@ -143,7 +143,7 @@ class CommandManager
         $provider = null;
         switch ($credentials->getProvider()) {
             default:
-                throw new CommandFailedException("Unknown provider");
+                throw new CommandFailedException("Unknown provider (".$credentials->getProvider().")");
             case Provider::AWS():
                 $provider = CloudProvider::AWS;
                 break;
@@ -176,7 +176,7 @@ class CommandManager
     {
         switch ($credentials->getProvider()) {
             default:
-                throw new CommandFailedException("Unknown provider");
+                throw new CommandFailedException("Unknown provider (".$credentials->getProvider().")");
             case Provider::AWS():
                 $cloud_credentials = new AwsCredential(
                     $credentials->getAccessKey(),
@@ -216,7 +216,7 @@ class CommandManager
     {
         switch ($proxy->getType()) {
             default:
-                throw new CommandFailedException("Unknown proxy type");
+                throw new CommandFailedException("Unknown proxy type (".$proxy->getType().")");
             case ProxyType::SOCKS5():
                 return new SocksProxy(
                     $proxy->getHostname(),
