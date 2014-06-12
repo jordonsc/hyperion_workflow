@@ -29,13 +29,15 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
 
         switch ($bake_stage) {
             // Launch instance
-            default:
             case BakeStage::SPAWNING:
                 return $this->processSpawning();
             // Bake
             // Save image
             // Wait for image
             // Terminate instance
+            // Default
+            default:
+                return WorkflowResult::FAIL();
         }
     }
 
@@ -86,7 +88,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
     {
         $this->commands[] = new WorkflowCommand(
             $this->action->getProject(),
-            ApplicationEnvironment::BAKERY,
+            $this->action->getEnvironment(),
             CommandType::LAUNCH_INSTANCE,
             [],
             $this->getNsPrefix().self::NS_INSTANCE
@@ -104,7 +106,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
     {
         $this->commands[] = new WorkflowCommand(
             $this->action->getProject(),
-            ApplicationEnvironment::BAKERY,
+            $this->action->getEnvironment(),
             CommandType::WAIT_CHECK_INSTANCE,
             [
                 'delay'       => self::CHECK_DELAY,
@@ -124,7 +126,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
     {
         $this->commands[] = new WorkflowCommand(
             $this->action->getProject(),
-            ApplicationEnvironment::BAKERY,
+            $this->action->getEnvironment(),
             CommandType::BAKE_INSTANCE,
             [
                 'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),

@@ -36,7 +36,9 @@ class WorkerCommand extends ApplicationCommand implements LoggerAwareInterface
 
         try {
             // Poll and process a task
-            $this->debug("Polling for work");
+            if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $this->debug("Polling for work");
+            }
             $task = $wm->getWorkTask();
 
             if ($task) {

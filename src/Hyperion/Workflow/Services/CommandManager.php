@@ -13,6 +13,7 @@ use Bravo3\NetworkProxy\Implementation\SocksProxy;
 use Bravo3\NetworkProxy\NetworkProxyInterface;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Credential;
+use Hyperion\Dbal\Entity\Environment;
 use Hyperion\Dbal\Entity\HyperionEntity;
 use Hyperion\Dbal\Entity\Project;
 use Hyperion\Dbal\Entity\Proxy;
@@ -20,10 +21,10 @@ use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\Provider;
 use Hyperion\Dbal\Enum\ProxyType;
 use Hyperion\Dbal\Exception\NotFoundException;
+use Hyperion\Workflow\CommandDriver\CheckInstanceDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\CreateInstanceDriver;
 use Hyperion\Workflow\Entity\WorkflowCommand;
-use Hyperion\Workflow\Enum\ApplicationEnvironment;
 use Hyperion\Workflow\Enum\CommandType;
 use Hyperion\Workflow\Exception\CommandFailedException;
 
@@ -63,28 +64,24 @@ class CommandManager
             throw new CommandFailedException("Invalid or missing project");
         }
 
-        /** @var Credential $credentials */
-        switch ($command->getEnvironment()) {
-            default:
-            case ApplicationEnvironment::TEST:
-            case ApplicationEnvironment::BAKERY:
-                $credentials = $this->getEntity(Entity::CREDENTIAL(), $project->getTestCredential());
-                $proxy       = $this->getEntity(Entity::PROXY(), $project->getTestProxy());
-                break;
-            case ApplicationEnvironment::PRODUCTION:
-                $credentials = $this->getEntity(Entity::CREDENTIAL(), $project->getProdCredential());
-                $proxy       = $this->getEntity(Entity::PROXY(), $project->getProdProxy());
-                break;
-
+        /** @var Environment $environment */
+        $environment = $this->getEntity(Entity::ENVIRONMENT(), $command->getEnvironment());
+        if (!$environment) {
+            throw new CommandFailedException("Invalid or missing environment");
         }
 
+        /** @var Credential $credentials */
+        $credentials = $this->getEntity(Entity::CREDENTIAL(), $environment->getCredential());
         if (!$credentials) {
             throw new CommandFailedException("Invalid or missing credentials");
         }
 
+        /** @var Proxy $proxy */
+        $proxy = $this->getEntity(Entity::PROXY(), $environment->getProxy());
+
         // Find the appropriate action function and execute
-        $service = $this->buildCloudService($project, $credentials, $proxy);
-        $driver  = $this->getDriverForCommand($command, $service, $project);
+        $service = $this->buildCloudService($credentials, $proxy);
+        $driver  = $this->getDriverForCommand($command, $service, $project, $environment);
         $driver->execute();
     }
 
@@ -94,16 +91,24 @@ class CommandManager
      * @param WorkflowCommand $command
      * @param CloudService    $service
      * @param Project         $project
-     * @return CommandDriverInterface
+     * @param Environment     $environment
      * @throws CommandFailedException
+     * @return CommandDriverInterface
      */
-    protected function getDriverForCommand(WorkflowCommand $command, CloudService $service, Project $project)
-    {
+    protected function getDriverForCommand(
+        WorkflowCommand $command,
+        CloudService $service,
+        Project $project,
+        Environment $environment
+    ) {
         switch ($command->getCommand()) {
             default:
                 throw new CommandFailedException("Unknown command (".$command->getCommand().")");
             case CommandType::LAUNCH_INSTANCE:
-                return new CreateInstanceDriver($command, $service, $project, $this->pool);
+                return new CreateInstanceDriver($command, $service, $project, $environment, $this->pool);
+            case CommandType::CHECK_INSTANCE:
+            case CommandType::WAIT_CHECK_INSTANCE:
+                return new CheckInstanceDriver($command, $service, $project, $environment, $this->pool);
         }
     }
 
@@ -130,12 +135,11 @@ class CommandManager
     /**
      * Create a cloud service out of DBAL entities
      *
-     * @param Project    $project
      * @param Credential $credentials
      * @param Proxy      $proxy
      * @return CloudService
      */
-    protected function buildCloudService(Project $project, Credential $credentials, Proxy $proxy = null)
+    protected function buildCloudService(Credential $credentials, Proxy $proxy = null)
     {
         $cloud_credentials = $this->buildCredentials($credentials);
         $cloud_proxy       = $proxy ? $this->buildProxy($proxy) : null;

@@ -69,6 +69,25 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
             }
         }
 
+        // Carry on the verbosity level
+        switch ($output->getVerbosity()) {
+            case OutputInterface::VERBOSITY_QUIET:
+                $bin .= ' -q';
+                break;
+            default:
+            case OutputInterface::VERBOSITY_NORMAL:
+                break;
+            case OutputInterface::VERBOSITY_VERBOSE:
+                $bin .= ' -v';
+                break;
+            case OutputInterface::VERBOSITY_VERY_VERBOSE:
+                $bin .= ' -vv';
+                break;
+            case OutputInterface::VERBOSITY_DEBUG:
+                $bin .= ' -vvv';
+                break;
+        }
+
         // Loop until ctrl+c hit
         do {
             $output = [];
@@ -84,7 +103,6 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
         } while (!$this->abort);
 
         // $this->abort_signal should always be 2 (SIGINT)
-        // We'll keep SIGTSTP (20, invoked by ctrl+z) open so the user can insta-kill if required
         $this->log(LogLevel::INFO, $daemon.": kill signal caught (".$this->abort_signal."), aborting gracefully");
     }
 

@@ -36,7 +36,9 @@ class DeciderCommand extends ApplicationCommand implements LoggerAwareInterface
 
         try {
             // Poll and process a task
-            $this->debug("Polling for decision");
+            if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $this->debug("Polling for decision");
+            }
             $task = $dm->getDecisionTask();
 
             if ($task) {

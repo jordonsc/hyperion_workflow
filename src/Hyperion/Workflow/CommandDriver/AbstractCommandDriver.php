@@ -3,14 +3,12 @@ namespace Hyperion\Workflow\CommandDriver;
 
 use Bravo3\Cache\PoolInterface;
 use Bravo3\CloudCtrl\Services\CloudService;
+use Hyperion\Dbal\Entity\Environment;
 use Hyperion\Dbal\Entity\Project;
+use Hyperion\Dbal\Enum\EnvironmentType;
 use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
-use Hyperion\Workflow\Enum\ApplicationEnvironment;
 
-/**
- * Abstract command driver
- */
 class AbstractCommandDriver
 {
     use ConfigTrait;
@@ -31,17 +29,28 @@ class AbstractCommandDriver
     protected $project;
 
     /**
+     * @var Environment
+     */
+    protected $environment;
+
+    /**
      * @var PoolInterface
      */
     protected $pool;
 
-    function __construct(WorkflowCommand $command, CloudService $service, Project $project, PoolInterface $pool)
-    {
+    function __construct(
+        WorkflowCommand $command,
+        CloudService $service,
+        Project $project,
+        Environment $environment,
+        PoolInterface $pool
+    ) {
         $this->command = $command;
         $this->service = $service;
         $this->project = $project;
-        $this->pool    = $pool;
-        $this->config  = $command->getParams();
+        $this->environment = $environment;
+        $this->pool = $pool;
+        $this->config = $command->getParams();
     }
 
     /**
@@ -51,7 +60,7 @@ class AbstractCommandDriver
      */
     protected function isProd()
     {
-        return $this->command->getEnvironment() === ApplicationEnvironment::PRODUCTION;
+        return $this->environment->getEnvironmentType() === EnvironmentType::PRODUCTION();
     }
 
     /**
@@ -61,7 +70,7 @@ class AbstractCommandDriver
      */
     protected function isBakery()
     {
-        return $this->command->getEnvironment() === ApplicationEnvironment::BAKERY;
+        return $this->environment->getEnvironmentType() === EnvironmentType::BAKERY();
     }
 
     /**
@@ -69,8 +78,7 @@ class AbstractCommandDriver
      */
     protected function isTest()
     {
-        return $this->command->getEnvironment() === ApplicationEnvironment::TEST;
+        return $this->environment->getEnvironmentType() === EnvironmentType::TEST();
     }
 
-}
- 
+} 

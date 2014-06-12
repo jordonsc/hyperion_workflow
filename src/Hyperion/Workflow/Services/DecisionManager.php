@@ -253,10 +253,11 @@ class DecisionManager implements LoggerAwareInterface
         );
 
         // Update action record via DBAL
-        $action = $task->getAction();
-        $action->setState(ActionState::FAILED());
-        // TODO: save reason with the DBAL record
-        $this->dm->update($action);
+        if ($action = $task->getAction()) {
+            $action->setState(ActionState::FAILED());
+            // TODO: save reason with the DBAL record
+            $this->dm->update($action);
+        }
     }
 
     protected function log($level, $message, $context = [])

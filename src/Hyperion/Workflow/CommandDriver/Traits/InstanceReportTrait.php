@@ -1,53 +1,37 @@
 <?php
-namespace Hyperion\Workflow\CommandDriver;
+namespace Hyperion\Workflow\CommandDriver\Traits;
 
-use Bravo3\CloudCtrl\Entity\Common\Zone;
+use Bravo3\Cache\PoolInterface;
 use Bravo3\CloudCtrl\Enum\InstanceState as CloudInstanceState;
 use Bravo3\CloudCtrl\Interfaces\Instance\InstanceInterface;
-use Bravo3\CloudCtrl\Schema\InstanceSchema;
 use Hyperion\Dbal\Enum\InstanceState;
-use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
-use Hyperion\Workflow\Exception\CommandFailedException;
+use Hyperion\Workflow\Entity\WorkflowCommand;
 
 /**
- * Spawn a new instance
+ * @property WorkflowCommand $command
  */
-class CreateInstanceDriver extends AbstractCommandDriver implements CommandDriverInterface
+trait InstanceReportTrait
 {
-    use InstanceReportTrait;
+    /**
+     * @var WorkflowCommand
+     */
+    protected $command;
 
-    public function execute()
+    /**
+     * @var PoolInterface
+     */
+    protected $pool;
+
+    /**
+     * Save an array of instance details to the cache pool
+     *
+     * @param InstanceInterface[] $instances
+     */
+    protected function saveAllInstancesReport(array $instances)
     {
-        $p     = $this->project;
-        $e     = $this->environment;
-        $count = $this->getConfig('count', 1);
-
-        $schema = new InstanceSchema();
-        $schema->setTemplateImageId($p->getSourceImageId());
-        $schema->setTenancy((string)$e->getTenancy());
-        $schema->setInstanceSize($e->getInstanceSize());
-        $schema->setFirewalls($e->getFirewalls());
-        $schema->setTags($e->getTags());
-        $schema->setNetwork($e->getNetwork());
-
-        $zones = [];
-        foreach ($p->getZones() as $zone) {
-            $zones[] = new Zone($zone);
-        }
-        $schema->setZones($zones);
-
-        $keys = $e->getKeyPairs();
-        $schema->setKeyName($keys ? $keys[0] : '');
-
-        // Spawn the instances
-        $report = $this->service->getInstanceManager()->createInstances($count, $schema);
-
-        if ($report->getSuccess()) {
-            // Success, save details to provided cache pool
-            $this->saveAllInstancesReport($report->getInstances());
-        } else {
-            // Failed :(
-            throw new CommandFailedException($report->getResultMessage());
+        $instance_index = 0;
+        foreach ($instances as $instance) {
+            $this->saveInstanceReport($instance_index++, $instance);
         }
 
     }
@@ -61,6 +45,9 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
     protected function saveInstanceReport($index, InstanceInterface $instance)
     {
         $namespace = $this->command->getResultNamespace();
+        if (!$namespace) {
+            return;
+        }
 
         // Instance ID
         $this->pool->getItem($namespace.'.'.$index.'.instance-id')->set(
@@ -98,4 +85,3 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
     }
 
 }
- 
