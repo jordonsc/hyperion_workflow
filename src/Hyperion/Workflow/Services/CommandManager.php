@@ -5,7 +5,6 @@ use Bravo3\Cache\PoolInterface;
 use Bravo3\CloudCtrl\Entity\Aws\AwsCredential;
 use Bravo3\CloudCtrl\Entity\Azure\AzureCredential;
 use Bravo3\CloudCtrl\Entity\Google\GoogleCredential;
-use Bravo3\CloudCtrl\Enum\Provider as CloudProvider;
 use Bravo3\CloudCtrl\Interfaces\Credentials\CredentialInterface;
 use Bravo3\CloudCtrl\Services\CloudService;
 use Bravo3\NetworkProxy\Implementation\HttpProxy;
@@ -21,12 +20,11 @@ use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\Provider;
 use Hyperion\Dbal\Enum\ProxyType;
 use Hyperion\Dbal\Exception\NotFoundException;
-use Hyperion\Workflow\CommandDriver\CheckInstanceDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
-use Hyperion\Workflow\CommandDriver\CreateInstanceDriver;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\CommandType;
 use Hyperion\Workflow\Exception\CommandFailedException;
+use Hyperion\Workflow\Mappers\ProviderMapper;
 
 /**
  * Executes commands
@@ -104,12 +102,26 @@ class CommandManager
         switch ($command->getCommand()) {
             default:
                 throw new CommandFailedException("Unknown command (".$command->getCommand().")");
+
+            // -- GENERIC COMMANDS -- //
+            case CommandType::CHECK_CONNECTIVITY:
+                $class = 'CheckConnectivityDriver';
+                break;
+
+            // - INSTANCE COMMANDS - //
             case CommandType::LAUNCH_INSTANCE:
-                return new CreateInstanceDriver($command, $service, $project, $environment, $this->pool);
+                $class = 'CreateInstanceDriver';
+                break;
             case CommandType::CHECK_INSTANCE:
-            case CommandType::WAIT_CHECK_INSTANCE:
-                return new CheckInstanceDriver($command, $service, $project, $environment, $this->pool);
+                $class = 'CheckInstanceDriver';
+                break;
+            case CommandType::BAKE_INSTANCE:
+                $class = 'BakeDriver';
+                break;
         }
+
+        $class = 'Hyperion\Workflow\CommandDriver\\'.$class;
+        return new $class($command, $service, $project, $environment, $this->pool);
     }
 
     /**
@@ -144,19 +156,9 @@ class CommandManager
         $cloud_credentials = $this->buildCredentials($credentials);
         $cloud_proxy       = $proxy ? $this->buildProxy($proxy) : null;
 
-        $provider = null;
-        switch ($credentials->getProvider()) {
-            default:
-                throw new CommandFailedException("Unknown provider (".$credentials->getProvider().")");
-            case Provider::AWS():
-                $provider = CloudProvider::AWS;
-                break;
-            case Provider::GOOGLE_CLOUD():
-                $provider = CloudProvider::GOOGLE;
-                break;
-            case Provider::WINDOWS_AZURE():
-                $provider = CloudProvider::AZURE;
-                break;
+        $provider = ProviderMapper::DbalToCloudCtrl($credentials->getProvider());
+        if (!$provider) {
+            throw new CommandFailedException("Unknown provider (".$credentials->getProvider().")");
         }
 
         return CloudService::createCloudService(

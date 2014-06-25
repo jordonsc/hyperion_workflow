@@ -2,32 +2,24 @@
 namespace Hyperion\Workflow\CommandDriver\Traits;
 
 use Bravo3\Cache\PoolInterface;
-use Bravo3\CloudCtrl\Enum\InstanceState as CloudInstanceState;
+use Bravo3\CloudCtrl\Collections\InstanceCollection;
 use Bravo3\CloudCtrl\Interfaces\Instance\InstanceInterface;
-use Hyperion\Dbal\Enum\InstanceState;
 use Hyperion\Workflow\Entity\WorkflowCommand;
+use Hyperion\Workflow\Mappers\InstanceStateMapper;
 
 /**
  * @property WorkflowCommand $command
+ * @property PoolInterface   $pool
  */
 trait InstanceReportTrait
 {
-    /**
-     * @var WorkflowCommand
-     */
-    protected $command;
-
-    /**
-     * @var PoolInterface
-     */
-    protected $pool;
 
     /**
      * Save an array of instance details to the cache pool
      *
-     * @param InstanceInterface[] $instances
+     * @param InstanceCollection $instances
      */
-    protected function saveAllInstancesReport(array $instances)
+    protected function saveAllInstancesReport(InstanceCollection $instances)
     {
         $instance_index = 0;
         foreach ($instances as $instance) {
@@ -49,39 +41,37 @@ trait InstanceReportTrait
             return;
         }
 
-        // Instance ID
-        $this->pool->getItem($namespace.'.'.$index.'.instance-id')->set(
-            $instance->getInstanceId()
-        );
+        $this->pool->getItem($namespace.'.'.$index.'.instance-id')->set($instance->getInstanceId());
+        $this->pool->getItem($namespace.'.'.$index.'.image-id')->set($instance->getImageId());
+        $this->pool->getItem($namespace.'.'.$index.'.architecture')->set($instance->getArchitecture());
+        $this->pool->getItem($namespace.'.'.$index.'.size')->set($instance->getInstanceSize());
+        $this->pool->getItem($namespace.'.'.$index.'.zone')->set($instance->getZone()->getZoneName());
+        $this->pool->getItem($namespace.'.'.$index.'.tags')->set(json_encode($instance->getTags()));
 
-        // State
-        $state      = $instance->getInstanceState(); // cloud-controller enum
-        $dbal_state = null;
-
-        // Create a DBAL state enum
-        switch ($state) {
-            default:
-            case CloudInstanceState::PENDING:
-                $dbal_state = InstanceState::PENDING;
-                break;
-            case CloudInstanceState::STARTING:
-                $dbal_state = InstanceState::STARTING;
-                break;
-            case CloudInstanceState::RUNNING:
-                $dbal_state = InstanceState::RUNNING;
-                break;
-            case CloudInstanceState::STOPPING:
-                $dbal_state = InstanceState::SHUTTING_DOWN;
-                break;
-            case CloudInstanceState::STOPPED:
-                $dbal_state = InstanceState::STOPPED;
-                break;
-            case CloudInstanceState::TERMINATED:
-                $dbal_state = InstanceState::TERMINATED;
-                break;
+        if ($private_ip = $instance->getPrivateAddress()) {
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.dns')->set($private_ip->getDnsName());
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip4')->set($private_ip->getIp4Address());
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip6')->set($private_ip->getIp4Address());
+        } else {
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.dns')->set('');
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip4')->set('');
+            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip6')->set('');
         }
 
-        $this->pool->getItem($namespace.'.'.$index.'.state')->set($dbal_state);
+        if ($public_ip = $instance->getPublicAddress()) {
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.dns')->set($public_ip->getDnsName());
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip4')->set($public_ip->getIp4Address());
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip6')->set($public_ip->getIp4Address());
+        } else {
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.dns')->set('');
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip4')->set('');
+            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip6')->set('');
+        }
+
+        // State
+        $state = InstanceStateMapper::CloudCtrlToDbal($instance->getInstanceState());
+        $this->pool->getItem($namespace.'.'.$index.'.state')->set($state->value());
+
     }
 
 }

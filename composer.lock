@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2b34cda1178d9dbf68bbd457b648966f",
+    "hash": "3a8fd9c68d08e66707009c3f37563118",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.6.6",
+            "version": "2.6.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "37d5572e2408c5ea7104c361b64a187b1a0a53bd"
+                "reference": "96886d56c54c1052f6c0c5f067278ad2e4d33314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/37d5572e2408c5ea7104c361b64a187b1a0a53bd",
-                "reference": "37d5572e2408c5ea7104c361b64a187b1a0a53bd",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/96886d56c54c1052f6c0c5f067278ad2e4d33314",
+                "reference": "96886d56c54c1052f6c0c5f067278ad2e4d33314",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,7 @@
                 "doctrine/cache": "~1.0",
                 "ext-openssl": "*",
                 "monolog/monolog": "1.4.*",
-                "phpunit/phpunit": "3.7.*",
+                "phpunit/phpunit": "4.*",
                 "symfony/class-loader": "2.*",
                 "symfony/yaml": "2.*"
             },
@@ -72,7 +72,56 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-05-29 18:57:57"
+            "time": "2014-06-20 17:52:24"
+        },
+        {
+            "name": "bravo3/bakery",
+            "version": "0.0.1-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bravo3/bakery.git",
+                "reference": "c3fb3dc16685e49a00841a568fee037279d6a576"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/c3fb3dc16685e49a00841a568fee037279d6a576",
+                "reference": "c3fb3dc16685e49a00841a568fee037279d6a576",
+                "shasum": ""
+            },
+            "require": {
+                "bravo3/ssh": "~1.4.2",
+                "bravo3/standards": "~1.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": [
+                        "src/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
+            "description": "SSH remote server bakery",
+            "keywords": [
+                "bake",
+                "cloud",
+                "ssh"
+            ],
+            "time": "2014-06-25 02:57:52"
         },
         {
             "name": "bravo3/cache",
@@ -127,21 +176,21 @@
         },
         {
             "name": "bravo3/cloud-controller",
-            "version": "0.0.1-beta",
+            "version": "0.1.0-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/cloud-ctrl.git",
-                "reference": "f5322e9e04b32e485d110d3a7cc0b5c5405daac6"
+                "reference": "e4d7520de762f2e9d01ea7f463a7b50a2052d260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/cloud-ctrl/zipball/f5322e9e04b32e485d110d3a7cc0b5c5405daac6",
-                "reference": "f5322e9e04b32e485d110d3a7cc0b5c5405daac6",
+                "url": "https://api.github.com/repos/bravo3/cloud-ctrl/zipball/e4d7520de762f2e9d01ea7f463a7b50a2052d260",
+                "reference": "e4d7520de762f2e9d01ea7f463a7b50a2052d260",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "~2.5",
-                "bravo3/cache": "~0.1",
+                "bravo3/cache": "~0.1.1",
                 "bravo3/network-proxy": "~1.1",
                 "eloquent/enumeration": "~5.1",
                 "google/apiclient": "1.0.*@beta",
@@ -177,7 +226,7 @@
                 "cloud",
                 "google cloud"
             ],
-            "time": "2014-04-13 09:18:17"
+            "time": "2014-06-16 03:54:39"
         },
         {
             "name": "bravo3/network-proxy",
@@ -263,6 +312,104 @@
                 "properties"
             ],
             "time": "2014-05-26 09:01:15"
+        },
+        {
+            "name": "bravo3/ssh",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bravo3/ssh.git",
+                "reference": "680469ffcd1d64b4078553dba2b9626346a6a0cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bravo3/ssh/zipball/680469ffcd1d64b4078553dba2b9626346a6a0cc",
+                "reference": "680469ffcd1d64b4078553dba2b9626346a6a0cc",
+                "shasum": ""
+            },
+            "require": {
+                "bravo3/standards": "~1.0",
+                "ext-ssh2": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "ext-openssl": "*",
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "suggest": {
+                "ext-openssl": "To allow the use of private keys without public keys"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
+            "description": "Interactive SSH2 suite for PHP 5.4",
+            "keywords": [
+                "shell",
+                "ssh",
+                "ssh2"
+            ],
+            "time": "2014-06-25 00:49:19"
+        },
+        {
+            "name": "bravo3/standards",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bravo3/standards.git",
+                "reference": "117fa0149321b151ea8dd63d4315e2a7f1b90db2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bravo3/standards/zipball/117fa0149321b151ea8dd63d4315e2a7f1b90db2",
+                "reference": "117fa0149321b151ea8dd63d4315e2a7f1b90db2",
+                "shasum": ""
+            },
+            "require": {
+                "eloquent/enumeration": "~5.1",
+                "php": ">=5.4.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": [
+                        "src/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
+            "description": "Bravo3 Standards",
+            "keywords": [
+                "bravo3",
+                "standards"
+            ],
+            "time": "2014-06-20 02:27:23"
         },
         {
             "name": "doctrine/annotations",
@@ -640,12 +787,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "42f66a0f94966b42fefe6dbc72f924eb87550fb4"
+                "reference": "47d16551e1ae635b18e2a35a3fc54b6fcf8885ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/42f66a0f94966b42fefe6dbc72f924eb87550fb4",
-                "reference": "42f66a0f94966b42fefe6dbc72f924eb87550fb4",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/47d16551e1ae635b18e2a35a3fc54b6fcf8885ee",
+                "reference": "47d16551e1ae635b18e2a35a3fc54b6fcf8885ee",
                 "shasum": ""
             },
             "require": {
@@ -686,7 +833,7 @@
                 "source": "https://github.com/jordonsc/hyperion_dbal/tree/master",
                 "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
             },
-            "time": "2014-06-12 05:34:22"
+            "time": "2014-06-12 07:14:24"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2059,6 +2206,7 @@
     "minimum-stability": "beta",
     "stability-flags": {
         "hyperion/dbal": 20,
+        "bravo3/bakery": 10,
         "bravo3/cloud-controller": 10
     },
     "platform": {

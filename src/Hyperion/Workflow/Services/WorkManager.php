@@ -95,6 +95,10 @@ class WorkManager implements LoggerAwareInterface
     {
         $this->log(LogLevel::DEBUG, "Activity ".$task->getExecutionId()." succeeded: ".$result);
 
+        if (strlen($result) > 256) {
+            $result = substr($result, 0, 253).'...';
+        }
+
         $this->swf->respondActivityTaskCompleted(
             [
                 'taskToken' => $task->getToken(),
@@ -112,6 +116,10 @@ class WorkManager implements LoggerAwareInterface
     public function respondFailed(WorkTask $task, $reason)
     {
         $this->log(LogLevel::ERROR, "Activity ".$task->getExecutionId()." failed: ".$reason);
+
+        if (strlen($reason) > 256) {
+            $reason = substr($reason, 0, 253).'...';
+        }
 
         $this->swf->respondActivityTaskFailed(
             [

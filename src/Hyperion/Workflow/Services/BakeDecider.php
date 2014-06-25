@@ -69,7 +69,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
 
             // These are all error cases at this stage of the process and shouldn't occur
             default:
-            case InstanceState::SHUTTING_DOWN:
+            case InstanceState::STOPPING:
             case InstanceState::TERMINATING:
             case InstanceState::STOPPED:
             case InstanceState::TERMINATED:
@@ -107,7 +107,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         $this->commands[] = new WorkflowCommand(
             $this->action->getProject(),
             $this->action->getEnvironment(),
-            CommandType::WAIT_CHECK_INSTANCE,
+            CommandType::CHECK_INSTANCE,
             [
                 'delay'       => self::CHECK_DELAY,
                 'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
@@ -124,17 +124,36 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     protected function actionBakeInstance()
     {
-        $this->commands[] = new WorkflowCommand(
-            $this->action->getProject(),
-            $this->action->getEnvironment(),
-            CommandType::BAKE_INSTANCE,
-            [
-                'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
-            ],
-            $this->getNsPrefix().self::NS_INSTANCE
-        );
+        $connectivity = ($this->getState(self::NS_INSTANCE.'.0.connectivity', 'false')) == 'true';
 
-        $this->setState(self::NS_STAGE, BakeStage::BAKING);
+        if (!$connectivity) {
+            // Test that the SSH service has come up
+            $this->commands[] = new WorkflowCommand(
+                $this->action->getProject(),
+                $this->action->getEnvironment(),
+                CommandType::CHECK_CONNECTIVITY,
+                [
+                    'delay'   => self::CHECK_DELAY,
+                    'address' => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4', null),
+                    'port'    => '22', // TODO: should be part of schema!
+                ],
+                $this->getNsPrefix().self::NS_INSTANCE.'.0.connectivity'
+            );
+
+        } else {
+            // OK to bake
+            $this->commands[] = new WorkflowCommand(
+                $this->action->getProject(),
+                $this->action->getEnvironment(),
+                CommandType::BAKE_INSTANCE,
+                [
+                    'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
+                ],
+                $this->getNsPrefix().self::NS_INSTANCE
+            );
+
+            $this->setState(self::NS_STAGE, BakeStage::BAKING);
+        }
 
         return WorkflowResult::COMMAND();
     }
