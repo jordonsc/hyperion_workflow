@@ -3,6 +3,7 @@ namespace Hyperion\Workflow\CommandDriver;
 
 use Bravo3\Cache\PoolInterface;
 use Bravo3\CloudCtrl\Services\CloudService;
+use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Environment;
 use Hyperion\Dbal\Entity\Project;
 use Hyperion\Dbal\Enum\EnvironmentType;
@@ -45,12 +46,12 @@ class AbstractCommandDriver
         Environment $environment,
         PoolInterface $pool
     ) {
-        $this->command = $command;
-        $this->service = $service;
-        $this->project = $project;
-        $this->environment = $environment;
-        $this->pool = $pool;
-        $this->config = $command->getParams();
+        $this->command      = $command;
+        $this->service      = $service;
+        $this->project      = $project;
+        $this->environment  = $environment;
+        $this->pool         = $pool;
+        $this->config       = $command->getParams();
     }
 
     /**

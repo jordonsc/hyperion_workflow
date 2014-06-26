@@ -28,7 +28,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         $bake_stage = $this->getState(self::NS_STAGE, BakeStage::SPAWNING);
 
         switch ($bake_stage) {
-            // Launch instance
+            // Launch instance, bake
             case BakeStage::SPAWNING:
                 return $this->processSpawning();
             // Bake
@@ -87,8 +87,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
     protected function actionSpawnInstance()
     {
         $this->commands[] = new WorkflowCommand(
-            $this->action->getProject(),
-            $this->action->getEnvironment(),
+            $this->action,
             CommandType::LAUNCH_INSTANCE,
             [],
             $this->getNsPrefix().self::NS_INSTANCE
@@ -105,8 +104,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
     protected function actionCheckInstance()
     {
         $this->commands[] = new WorkflowCommand(
-            $this->action->getProject(),
-            $this->action->getEnvironment(),
+            $this->action,
             CommandType::CHECK_INSTANCE,
             [
                 'delay'       => self::CHECK_DELAY,
@@ -129,8 +127,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         if (!$connectivity) {
             // Test that the SSH service has come up
             $this->commands[] = new WorkflowCommand(
-                $this->action->getProject(),
-                $this->action->getEnvironment(),
+                $this->action,
                 CommandType::CHECK_CONNECTIVITY,
                 [
                     'delay'   => self::CHECK_DELAY,
@@ -143,11 +140,12 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         } else {
             // OK to bake
             $this->commands[] = new WorkflowCommand(
-                $this->action->getProject(),
-                $this->action->getEnvironment(),
+                $this->action,
                 CommandType::BAKE_INSTANCE,
                 [
                     'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
+                    'address'     => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4', null),
+                    'port'        => '22', // TODO: should be part of schema!
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE
             );

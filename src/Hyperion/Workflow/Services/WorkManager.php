@@ -59,9 +59,9 @@ class WorkManager implements LoggerAwareInterface
             $this->swf->pollForActivityTask(
                 [
                     'domain'   => $this->config['domain'],
-                    'taskList' => array(
+                    'taskList' => [
                         'name' => $this->swf_config['tasklist'],
-                    ),
+                    ],
                     'identity' => self::IDENTITY,
                 ]
             )

@@ -787,12 +787,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "47d16551e1ae635b18e2a35a3fc54b6fcf8885ee"
+                "reference": "c38a0835235003a08d3f5f851f57ba5914cff98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/47d16551e1ae635b18e2a35a3fc54b6fcf8885ee",
-                "reference": "47d16551e1ae635b18e2a35a3fc54b6fcf8885ee",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/c38a0835235003a08d3f5f851f57ba5914cff98e",
+                "reference": "c38a0835235003a08d3f5f851f57ba5914cff98e",
                 "shasum": ""
             },
             "require": {
@@ -833,7 +833,7 @@
                 "source": "https://github.com/jordonsc/hyperion_dbal/tree/master",
                 "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
             },
-            "time": "2014-06-12 07:14:24"
+            "time": "2014-06-26 06:26:38"
         },
         {
             "name": "incenteev/composer-parameter-handler",

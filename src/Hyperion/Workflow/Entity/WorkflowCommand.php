@@ -1,9 +1,16 @@
 <?php
 namespace Hyperion\Workflow\Entity;
 
+use Hyperion\Dbal\Entity\Action;
+
 class WorkflowCommand
 {
     const DEFAULT_TIMEOUT = 300;
+
+    /**
+     * @var int
+     */
+    protected $action;
 
     /**
      * @var int
@@ -40,15 +47,15 @@ class WorkflowCommand
     protected $timeout;
 
     function __construct(
-        $project,
-        $environment,
+        Action $action,
         $command,
         $params = [],
         $result_namespace = null,
         $timeout = self::DEFAULT_TIMEOUT
     ) {
-        $this->project          = $project;
-        $this->environment      = $environment;
+        $this->action           = $action->getId();
+        $this->project          = $action->getProject();
+        $this->environment      = $action->getEnvironment();
         $this->command          = $command;
         $this->params           = $params;
         $this->result_namespace = $result_namespace;
@@ -188,6 +195,28 @@ class WorkflowCommand
     }
 
     /**
+     * Set Action
+     *
+     * @param int $action
+     * @return $this
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+    /**
+     * Get Action
+     *
+     * @return int
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
      * Return the command in JSON format
      *
      * @return string
@@ -195,6 +224,7 @@ class WorkflowCommand
     public function serialise()
     {
         $out = [
+            'act'  => $this->getAction(),
             'prj'  => $this->getProject(),
             'env'  => $this->getEnvironment(),
             'cmd'  => $this->getCommand(),
@@ -215,9 +245,14 @@ class WorkflowCommand
     public static function deserialise($str)
     {
         $in  = json_decode($str, true);
+
+        $action = new Action();
+        $action->setId(isset($in['act']) ? $in['act'] : null);
+        $action->setProject(isset($in['prj']) ? $in['prj'] : null);
+        $action->setEnvironment(isset($in['env']) ? $in['env'] : null);
+
         $obj = new static(
-            isset($in['prj']) ? $in['prj'] : null,
-            isset($in['env']) ? $in['env'] : null,
+            $action,
             isset($in['cmd']) ? $in['cmd'] : null,
             isset($in['para']) ? $in['para'] : null,
             isset($in['ns']) ? $in['ns'] : null,
