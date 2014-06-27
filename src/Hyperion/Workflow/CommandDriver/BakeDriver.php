@@ -25,7 +25,6 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $prj     = $this->project;
         $env     = $this->environment;
         $address = $this->getConfig('address');
-        $port    = $this->getConfig('port');
 
         // Prep the bakery service
         if ($env->getSshPkey()) {
@@ -36,7 +35,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         }
 
         $output = new OutputLogger('/tmp/bake-'.$this->command->getAction().'-out.log');
-        $bakery = new Bakery(new Host($address, $port, $credential), $output);
+        $bakery = new Bakery(new Host($address, $env->getSshPort(), $credential), $output);
 
         // Prepare a schema
         $schema = new Schema(PackagerTypeMapper::dbalToBakery($prj->getPackager()));

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.6.8",
+            "version": "2.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "96886d56c54c1052f6c0c5f067278ad2e4d33314"
+                "reference": "266a857c23292d3b63be44465b5e1aff7aff87c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/96886d56c54c1052f6c0c5f067278ad2e4d33314",
-                "reference": "96886d56c54c1052f6c0c5f067278ad2e4d33314",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/266a857c23292d3b63be44465b5e1aff7aff87c0",
+                "reference": "266a857c23292d3b63be44465b5e1aff7aff87c0",
                 "shasum": ""
             },
             "require": {
@@ -72,24 +72,24 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-06-20 17:52:24"
+            "time": "2014-06-26 21:08:57"
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.1-beta",
+            "version": "0.0.4-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "c3fb3dc16685e49a00841a568fee037279d6a576"
+                "reference": "b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/c3fb3dc16685e49a00841a568fee037279d6a576",
-                "reference": "c3fb3dc16685e49a00841a568fee037279d6a576",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e",
+                "reference": "b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e",
                 "shasum": ""
             },
             "require": {
-                "bravo3/ssh": "~1.4.2",
+                "bravo3/ssh": "~1.4.3",
                 "bravo3/standards": "~1.0",
                 "php": ">=5.4.0"
             },
@@ -121,7 +121,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-06-25 02:57:52"
+            "time": "2014-06-27 02:32:46"
         },
         {
             "name": "bravo3/cache",
@@ -315,16 +315,16 @@
         },
         {
             "name": "bravo3/ssh",
-            "version": "1.4.2",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/ssh.git",
-                "reference": "680469ffcd1d64b4078553dba2b9626346a6a0cc"
+                "reference": "e7865a3f275cc0dbd72bdd97f6441665e5acb959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/ssh/zipball/680469ffcd1d64b4078553dba2b9626346a6a0cc",
-                "reference": "680469ffcd1d64b4078553dba2b9626346a6a0cc",
+                "url": "https://api.github.com/repos/bravo3/ssh/zipball/e7865a3f275cc0dbd72bdd97f6441665e5acb959",
+                "reference": "e7865a3f275cc0dbd72bdd97f6441665e5acb959",
                 "shasum": ""
             },
             "require": {
@@ -361,7 +361,7 @@
                 "ssh",
                 "ssh2"
             ],
-            "time": "2014-06-25 00:49:19"
+            "time": "2014-06-27 02:23:46"
         },
         {
             "name": "bravo3/standards",
@@ -449,7 +449,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -517,7 +517,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -538,7 +538,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2149,7 +2149,8 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net"
+                    "email": "aharvey@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Bernhard Schussek",

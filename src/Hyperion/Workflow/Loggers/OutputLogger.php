@@ -1,7 +1,6 @@
 <?php
 namespace Hyperion\Workflow\Loggers;
 
-
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;

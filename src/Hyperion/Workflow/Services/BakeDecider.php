@@ -31,16 +31,28 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
             // Launch instance, bake
             case BakeStage::SPAWNING:
                 return $this->processSpawning();
-            // Bake
             // Save image
+            case BakeStage::BAKING:
+                return $this->processBaking();
             // Wait for image
             // Terminate instance
             // Default
             default:
+                $this->reason = "Workflow default";
                 return WorkflowResult::FAIL();
         }
     }
 
+    /**
+     * Shutdown the baked instance and save an image
+     *
+     * @return WorkflowResult
+     */
+    protected function processBaking()
+    {
+        $this->reason = 'Not implemented';
+        return WorkflowResult::FAIL();
+    }
 
     /**
      * Sequence of events that happen while the bake template is spawning
@@ -132,7 +144,6 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 [
                     'delay'   => self::CHECK_DELAY,
                     'address' => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4', null),
-                    'port'    => '22', // TODO: should be part of schema!
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE.'.0.connectivity'
             );
@@ -145,7 +156,6 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 [
                     'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id', null),
                     'address'     => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4', null),
-                    'port'        => '22', // TODO: should be part of schema!
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE
             );
