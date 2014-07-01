@@ -1,6 +1,8 @@
 <?php
-namespace Hyperion\Workflow\CommandDriver;
+namespace Hyperion\Workflow\CommandDriver\General;
 
+use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
+use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
 use Hyperion\Workflow\Exception\CommandFailedException;
 

@@ -2,6 +2,7 @@
 namespace Hyperion\Workflow\Services;
 
 use Bravo3\Cache\PoolInterface;
+use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
 use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
@@ -25,6 +26,11 @@ class AbstractDecider
     protected $pool;
 
     /**
+     * @var DataManager
+     */
+    protected $dbal;
+
+    /**
      * @var WorkflowCommand[]
      */
     protected $commands = [];
@@ -34,10 +40,11 @@ class AbstractDecider
      */
     protected $reason = null;
 
-    function __construct(Action $action, PoolInterface $cache)
+    function __construct(Action $action, PoolInterface $cache, DataManager $dbal)
     {
         $this->action = $action;
         $this->pool   = $cache;
+        $this->dbal   = $dbal;
     }
 
     /**
@@ -111,6 +118,22 @@ class AbstractDecider
     {
         return $this->action->getId().'-';
     }
+
+
+    /**
+     * Called by the DecisionManager when the workflow completes
+     */
+    public function onComplete()
+    {
+    }
+
+    /**
+     * Called by the DecisionManager when the workflow fails
+     */
+    public function onFail()
+    {
+    }
+
 
 }
  

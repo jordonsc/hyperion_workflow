@@ -1,11 +1,10 @@
 <?php
-namespace Hyperion\Workflow\CommandDriver;
+namespace Hyperion\Workflow\CommandDriver\Instance;
 
 use Bravo3\CloudCtrl\Entity\Common\Zone;
-use Bravo3\CloudCtrl\Enum\InstanceState as CloudInstanceState;
-use Bravo3\CloudCtrl\Interfaces\Instance\InstanceInterface;
 use Bravo3\CloudCtrl\Schema\InstanceSchema;
-use Hyperion\Dbal\Enum\InstanceState;
+use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
+use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
 use Hyperion\Workflow\Exception\CommandFailedException;
 

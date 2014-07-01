@@ -99,28 +99,12 @@ class CommandManager
         Project $project,
         Environment $environment
     ) {
-        switch ($command->getCommand()) {
-            default:
-                throw new CommandFailedException("Unknown command (".$command->getCommand().")");
+        $class = 'Hyperion\Workflow\CommandDriver\\'.$command->getCommand();
 
-            // -- GENERIC COMMANDS -- //
-            case CommandType::CHECK_CONNECTIVITY:
-                $class = 'CheckConnectivityDriver';
-                break;
-
-            // - INSTANCE COMMANDS - //
-            case CommandType::LAUNCH_INSTANCE:
-                $class = 'CreateInstanceDriver';
-                break;
-            case CommandType::CHECK_INSTANCE:
-                $class = 'CheckInstanceDriver';
-                break;
-            case CommandType::BAKE_INSTANCE:
-                $class = 'BakeDriver';
-                break;
+        if (!class_exists($class)) {
+            throw new CommandFailedException("Command does not exist: ".$command->getCommand());
         }
 
-        $class = 'Hyperion\Workflow\CommandDriver\\'.$class;
         return new $class($command, $service, $project, $environment, $this->pool);
     }
 
@@ -170,7 +154,7 @@ class CommandManager
     }
 
     /**
-     *  Create a CredentialInterface from a DBAL entity
+     * Create a CredentialInterface from a DBAL entity
      *
      * TODO: Google is broken - need more details in the DBAL entity
      *

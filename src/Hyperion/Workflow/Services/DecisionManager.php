@@ -123,7 +123,7 @@ class DecisionManager implements LoggerAwareInterface
         // Each action type has it's own decider - build it
         switch ($action->getActionType()) {
             case ActionType::BAKE():
-                $decider = new BakeDecider($action, $this->cache_pool);
+                $decider = new BakeDecider($action, $this->cache_pool, $this->dm);
                 break;
             default:
                 $this->respondFailed($task, "Unknown action type (".$action->getActionType()->value().")");
@@ -140,17 +140,20 @@ class DecisionManager implements LoggerAwareInterface
 
             // All done, close the workflow
             case WorkflowResult::COMPLETE():
+                $decider->onComplete();
                 $this->respondComplete($task);
                 break;
 
             // Failure in action
             default:
             case WorkflowResult::FAIL():
+                $decider->onFail();
                 $this->respondFailed($task, $decider->getReason());
                 break;
 
             // Timeout (a decider should never really throw this one)
             case WorkflowResult::TIMEOUT():
+                $decider->onFail();
                 $this->respondFailed($task, 'Timeout');
                 break;
         }
@@ -255,7 +258,12 @@ class DecisionManager implements LoggerAwareInterface
         // Update action record via DBAL
         if ($action = $task->getAction()) {
             $action->setState(ActionState::FAILED());
-            // TODO: save reason with the DBAL record
+
+            // Save reason with the DBAL record
+            $data = json_decode($action->getWorkflowData(), true);
+            $data['error'] = $reason;
+            $action->setWorkflowData(json_encode($data));
+
             $this->dm->update($action);
         }
     }

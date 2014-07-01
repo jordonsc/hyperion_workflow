@@ -1,7 +1,9 @@
 <?php
-namespace Hyperion\Workflow\CommandDriver;
+namespace Hyperion\Workflow\CommandDriver\Instance;
 
 use Bravo3\CloudCtrl\Filters\InstanceFilter;
+use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
+use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
 use Hyperion\Workflow\Exception\CommandFailedException;
 

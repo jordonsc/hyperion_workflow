@@ -1,5 +1,5 @@
 <?php
-namespace Hyperion\Workflow\CommandDriver;
+namespace Hyperion\Workflow\CommandDriver\Instance;
 
 use Bravo3\Bakery\Bakery;
 use Bravo3\Bakery\Entity\Host;
@@ -11,6 +11,8 @@ use Bravo3\Bakery\Operation\UpdatePackagesOperation;
 use Bravo3\SSH\Credentials\KeyCredential;
 use Bravo3\SSH\Credentials\PasswordCredential;
 use Hyperion\Dbal\Enum\EnvironmentType;
+use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
+use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\Loggers\OutputLogger;
 use Hyperion\Workflow\Mappers\PackagerTypeMapper;
 

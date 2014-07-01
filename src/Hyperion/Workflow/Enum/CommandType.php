@@ -3,17 +3,26 @@ namespace Hyperion\Workflow\Enum;
 
 use Eloquent\Enumeration\AbstractEnumeration;
 
+/**
+ * List of supported command drivers
+ */
 class CommandType extends AbstractEnumeration
 {
     // Generic commands
-    const CHECK_CONNECTIVITY = 'CHECK_CONNECTIVITY';
+    const CHECK_CONNECTIVITY = 'General\CheckConnectivityDriver';
 
     // Instance commands
-    const LAUNCH_INSTANCE     = 'LAUNCH_INSTANCE';
-    const CHECK_INSTANCE      = 'CHECK_INSTANCE';
-    const BAKE_INSTANCE       = 'BAKE_INSTANCE';
-    const SHUTDOWN_INSTANCE   = 'SHUTDOWN_INSTANCE';
-    const TERMINATE_INSTANCE  = 'TERMINATE_INSTANCE';
+    const LAUNCH_INSTANCE    = 'Instance\CreateInstanceDriver';
+    const CHECK_INSTANCE     = 'Instance\CheckInstanceDriver';
+    const BAKE_INSTANCE      = 'Instance\BakeDriver';
+    const SHUTDOWN_INSTANCE  = 'Instance\ShutdownInstanceDriver';
+    const TERMINATE_INSTANCE = 'Instance\TerminateInstanceDriver';
+    const RESTART_INSTANCE   = 'Instance\RestartInstanceDriver';
+
+    // Image commands
+    const CREATE_IMAGE     = 'Image\CreateImageDriver';
+    const CHECK_IMAGE      = 'Image\CheckImageDriver';
+    const DEREGISTER_IMAGE = 'Image\DeregisterImageDriver';
 
     // IP commands
 

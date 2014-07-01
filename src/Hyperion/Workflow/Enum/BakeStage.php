@@ -10,7 +10,8 @@ class BakeStage extends AbstractEnumeration
 {
     const SPAWNING = 0;
     const BAKING   = 10;
-    const SAVING   = 20;
-    const CLEANUP  = 30;
+    const SHUTDOWN = 30;
+    const SAVING   = 40;
+    const CLEANUP  = 50;
 }
  
