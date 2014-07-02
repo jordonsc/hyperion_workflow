@@ -69,22 +69,38 @@ class DecisionManager implements LoggerAwareInterface
      */
     public function getDecisionTask()
     {
-        $task = DecisionTask::fromGuzzleModel(
-            $this->swf->pollForDecisionTask(
-                [
-                    'domain'   => $this->config['domain'],
-                    'taskList' => array(
-                        'name' => $this->swf_config['tasklist'],
-                    ),
-                    'identity' => self::IDENTITY,
-                ]
-            )
-        );
+        /** @var DecisionTask $task */
+        $task = null;
+        $token = null;
+        do {
+            // SWF params
+            $args = [
+                'domain'   => $this->config['domain'],
+                'taskList' => array(
+                    'name' => $this->swf_config['tasklist'],
+                ),
+                'identity' => self::IDENTITY,
+            ];
 
+            if ($token) {
+                $args['nextPageToken'] = $token;
+            }
+
+            // Query SWF for task/more history
+            $model = $this->swf->pollForDecisionTask($args);
+
+            if ($task) {
+                $task->addHistory($model);
+            } else {
+                $task = DecisionTask::fromGuzzleModel($model);
+            }
+
+        } while ($token = $model->get('nextPageToken'));
+
+        // Get the DBAL entry
         if ($task) {
             $task->setAction($this->getActionForTask($task));
         }
-
 
         return $task;
     }
@@ -107,12 +123,6 @@ class DecisionManager implements LoggerAwareInterface
      */
     public function processDecisionTask(DecisionTask $task)
     {
-        // Check for activity failures
-        if ($task->hasFailed()) {
-            $this->respondFailed($task, join("; ", $task->getErrors()));
-            return;
-        }
-
         // Get the DBAL action record, without this we can't do anything
         $action = $task->getAction();
         if (!$action) {
@@ -128,6 +138,13 @@ class DecisionManager implements LoggerAwareInterface
             default:
                 $this->respondFailed($task, "Unknown action type (".$action->getActionType()->value().")");
                 return;
+        }
+
+        // Check for activity failures
+        if ($task->hasFailed()) {
+            $decider->onFail();
+            $this->respondFailed($task, join("; ", $task->getErrors()));
+            return;
         }
 
         // The decider will work out what to do when calling #getResult(), respond accordingly
@@ -260,7 +277,7 @@ class DecisionManager implements LoggerAwareInterface
             $action->setState(ActionState::FAILED());
 
             // Save reason with the DBAL record
-            $data = json_decode($action->getWorkflowData(), true);
+            $data          = json_decode($action->getWorkflowData(), true);
             $data['error'] = $reason;
             $action->setWorkflowData(json_encode($data));
 

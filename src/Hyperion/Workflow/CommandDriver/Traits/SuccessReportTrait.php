@@ -7,6 +7,7 @@ use Hyperion\Workflow\Entity\WorkflowCommand;
 /**
  * @property WorkflowCommand $command
  * @property PoolInterface   $pool
+ * @method null setState($key, $value, $ttl = 3600)
  */
 trait SuccessReportTrait
 {
@@ -17,7 +18,7 @@ trait SuccessReportTrait
             return;
         }
 
-        $this->pool->getItem($namespace)->set('1');
+        $this->setState($namespace, '1');
     }
 
     protected function reportFailed($reason = '')
@@ -27,7 +28,7 @@ trait SuccessReportTrait
             return;
         }
 
-        $this->pool->getItem($namespace)->set('0');
-        $this->pool->getItem($namespace.'.error')->set($reason);
+        $this->setState($namespace, '0');
+        $this->setState($namespace.'.error', $reason);
     }
 } 

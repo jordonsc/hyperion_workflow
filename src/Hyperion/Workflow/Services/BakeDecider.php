@@ -199,7 +199,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 'delay'    => self::CHECK_DELAY,
                 'image-id' => $this->getState(self::NS_IMAGE.'.id'),
             ],
-            $this->getNsPrefix().self::NS_INSTANCE
+            $this->getNsPrefix().self::NS_IMAGE
         );
         return WorkflowResult::COMMAND();
     }
@@ -230,14 +230,18 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         );
 
         // Deregister former image
-        $this->commands[] = new WorkflowCommand(
-            $this->action,
-            CommandType::DEREGISTER_IMAGE,
-            [
-                'image-id' => $project->getBakedImageId(),
-            ],
-            $this->getNsPrefix().self::NS_STAGE.'.deregister'
-        );
+        if ($project->getBakedImageId()) {
+            $this->commands[] = new WorkflowCommand(
+                $this->action,
+                CommandType::DEREGISTER_IMAGE,
+                [
+                    'image-id' => $project->getBakedImageId(),
+                ],
+                $this->getNsPrefix().self::NS_STAGE.'.deregister'
+            );
+        } else {
+            $this->setState(self::NS_STAGE.'.deregister', '1');
+        }
 
         // Update DBAL with new image
         $project->setBakedImageId($this->getState(self::NS_IMAGE.'.id'));

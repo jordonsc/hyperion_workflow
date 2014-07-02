@@ -33,14 +33,14 @@ class CheckConnectivityDriver extends AbstractCommandDriver implements CommandDr
         $fp     = @fsockopen('tcp://'.$address, $this->environment->getSshPort(), $errno, $errmsg, $timeout);
 
         if ($fp === false) {
-            $this->pool->getItem($this->command->getResultNamespace())->set('false');
-            $this->pool->getItem($this->command->getResultNamespace().'.code')->set($errno);
-            $this->pool->getItem($this->command->getResultNamespace().'.message')->set($errmsg);
+            $this->setState($this->command->getResultNamespace(), 'false');
+            $this->setState($this->command->getResultNamespace().'.code', $errno);
+            $this->setState($this->command->getResultNamespace().'.message', $errmsg);
         } else {
             fclose($fp);
-            $this->pool->getItem($this->command->getResultNamespace())->set('true');
-            $this->pool->getItem($this->command->getResultNamespace().'.code')->set('');
-            $this->pool->getItem($this->command->getResultNamespace().'.message')->set('');
+            $this->setState($this->command->getResultNamespace(), 'true');
+            $this->setState($this->command->getResultNamespace().'.code', '');
+            $this->setState($this->command->getResultNamespace().'.message', '');
         }
 
     }

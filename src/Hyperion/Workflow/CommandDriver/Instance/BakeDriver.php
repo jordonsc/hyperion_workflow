@@ -13,14 +13,13 @@ use Bravo3\SSH\Credentials\PasswordCredential;
 use Hyperion\Dbal\Enum\EnvironmentType;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
+use Hyperion\Workflow\Exception\CommandFailedException;
 use Hyperion\Workflow\Loggers\OutputLogger;
 use Hyperion\Workflow\Mappers\PackagerTypeMapper;
 
 class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
 {
-
     private $pkey_file = null;
-
 
     public function execute()
     {
@@ -72,9 +71,12 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         }
 
         // Do the bakey bakey
-        $bakery->bake($schema);
-
+        $success = $bakery->bake($schema);
         $this->cleanPrivateKey();
+
+        if (!$success) {
+            throw new CommandFailedException("Bakery failed");
+        }
     }
 
 

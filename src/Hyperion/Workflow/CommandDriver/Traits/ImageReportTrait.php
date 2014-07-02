@@ -8,6 +8,7 @@ use Hyperion\Workflow\Entity\WorkflowCommand;
 /**
  * @property WorkflowCommand $command
  * @property PoolInterface   $pool
+ * @method null setState($key, $value, $ttl = 3600)
  */
 trait ImageReportTrait
 {
@@ -24,10 +25,10 @@ trait ImageReportTrait
             return;
         }
 
-        $this->pool->getItem($namespace.'.id')->set($image->getImageId());
-        $this->pool->getItem($namespace.'.name')->set($image->getName());
-        $this->pool->getItem($namespace.'.owner')->set($image->getOwner());
-        $this->pool->getItem($namespace.'.state')->set($image->getState()->value());
+        $this->setState($namespace.'.id', $image->getImageId());
+        $this->setState($namespace.'.name', $image->getName());
+        $this->setState($namespace.'.owner', $image->getOwner());
+        $this->setState($namespace.'.state', $image->getState()->value());
     }
 
 }

@@ -46,12 +46,12 @@ class AbstractCommandDriver
         Environment $environment,
         PoolInterface $pool
     ) {
-        $this->command      = $command;
-        $this->service      = $service;
-        $this->project      = $project;
-        $this->environment  = $environment;
-        $this->pool         = $pool;
-        $this->config       = $command->getParams();
+        $this->command     = $command;
+        $this->service     = $service;
+        $this->project     = $project;
+        $this->environment = $environment;
+        $this->pool        = $pool;
+        $this->config      = $command->getParams();
     }
 
     /**
@@ -80,6 +80,18 @@ class AbstractCommandDriver
     protected function isTest()
     {
         return $this->environment->getEnvironmentType() === EnvironmentType::TEST();
+    }
+
+    /**
+     * Set a cache key
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $ttl
+     */
+    protected function setState($key, $value, $ttl = 3600)
+    {
+        $this->pool->getItem($key)->set($value, $ttl);
     }
 
 } 

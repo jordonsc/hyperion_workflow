@@ -10,6 +10,7 @@ use Hyperion\Workflow\Mappers\InstanceStateMapper;
 /**
  * @property WorkflowCommand $command
  * @property PoolInterface   $pool
+ * @method null setState($key, $value, $ttl = 3600)
  */
 trait InstanceReportTrait
 {
@@ -41,36 +42,36 @@ trait InstanceReportTrait
             return;
         }
 
-        $this->pool->getItem($namespace.'.'.$index.'.instance-id')->set($instance->getInstanceId());
-        $this->pool->getItem($namespace.'.'.$index.'.image-id')->set($instance->getImageId());
-        $this->pool->getItem($namespace.'.'.$index.'.architecture')->set($instance->getArchitecture());
-        $this->pool->getItem($namespace.'.'.$index.'.size')->set($instance->getInstanceSize());
-        $this->pool->getItem($namespace.'.'.$index.'.zone')->set($instance->getZone()->getZoneName());
-        $this->pool->getItem($namespace.'.'.$index.'.tags')->set(json_encode($instance->getTags()));
+        $this->setState($namespace.'.'.$index.'.instance-id', $instance->getInstanceId());
+        $this->setState($namespace.'.'.$index.'.image-id', $instance->getImageId());
+        $this->setState($namespace.'.'.$index.'.architecture', $instance->getArchitecture());
+        $this->setState($namespace.'.'.$index.'.size', $instance->getInstanceSize());
+        $this->setState($namespace.'.'.$index.'.zone', $instance->getZone()->getZoneName());
+        $this->setState($namespace.'.'.$index.'.tags', json_encode($instance->getTags()));
 
         if ($private_ip = $instance->getPrivateAddress()) {
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.dns')->set($private_ip->getDnsName());
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip4')->set($private_ip->getIp4Address());
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip6')->set($private_ip->getIp4Address());
+            $this->setState($namespace.'.'.$index.'.ip.private.dns', $private_ip->getDnsName());
+            $this->setState($namespace.'.'.$index.'.ip.private.ip4', $private_ip->getIp4Address());
+            $this->setState($namespace.'.'.$index.'.ip.private.ip6', $private_ip->getIp4Address());
         } else {
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.dns')->set('');
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip4')->set('');
-            $this->pool->getItem($namespace.'.'.$index.'.ip.private.ip6')->set('');
+            $this->setState($namespace.'.'.$index.'.ip.private.dns', '');
+            $this->setState($namespace.'.'.$index.'.ip.private.ip4', '');
+            $this->setState($namespace.'.'.$index.'.ip.private.ip6', '');
         }
 
         if ($public_ip = $instance->getPublicAddress()) {
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.dns')->set($public_ip->getDnsName());
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip4')->set($public_ip->getIp4Address());
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip6')->set($public_ip->getIp4Address());
+            $this->setState($namespace.'.'.$index.'.ip.public.dns', $public_ip->getDnsName());
+            $this->setState($namespace.'.'.$index.'.ip.public.ip4', $public_ip->getIp4Address());
+            $this->setState($namespace.'.'.$index.'.ip.public.ip6', $public_ip->getIp4Address());
         } else {
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.dns')->set('');
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip4')->set('');
-            $this->pool->getItem($namespace.'.'.$index.'.ip.public.ip6')->set('');
+            $this->setState($namespace.'.'.$index.'.ip.public.dns', '');
+            $this->setState($namespace.'.'.$index.'.ip.public.ip4', '');
+            $this->setState($namespace.'.'.$index.'.ip.public.ip6', '');
         }
 
         // State
         $state = InstanceStateMapper::CloudCtrlToDbal($instance->getInstanceState());
-        $this->pool->getItem($namespace.'.'.$index.'.state')->set($state->value());
+        $this->setState($namespace.'.'.$index.'.state', $state->value());
 
     }
 

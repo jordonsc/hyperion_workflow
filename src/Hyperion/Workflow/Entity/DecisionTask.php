@@ -79,7 +79,7 @@ class DecisionTask extends WorkflowTask
     public function fail($reason)
     {
         $this->has_failures = true;
-        $this->errors[] = $reason;
+        $this->errors[]     = $reason;
         return $this;
     }
 
@@ -115,26 +115,45 @@ class DecisionTask extends WorkflowTask
         $task = parent::fromGuzzleModel($model);
 
         if ($task) {
-            $events = $model->get('events');
-
-            foreach ($events as $event) {
-                // Get the workflow input (action ID) - relying on SWF to be reliable in their response here
-                if ($event['eventType'] == 'WorkflowExecutionStarted') {
-                //if (isset($event['workflowExecutionStartedEventAttributes'])) {
-                    $task->setActionId($event['workflowExecutionStartedEventAttributes']['input']);
-                }
-
-                // Check for activity failures
-                if ($event['eventType'] == 'ActivityTaskFailed') {
-                    $task->fail('Failed: '.$event['activityTaskFailedEventAttributes']['reason']);
-                } elseif ($event['eventType'] == 'ActivityTaskCanceled') {
-                    $task->fail('Canceled: '.$event['activityTaskCanceledEventAttributes']['details']);
-                } elseif ($event['eventType'] == 'ActivityTaskTimedOut') {
-                    $task->fail('Timeout');
-                }
-            }
+            $task->addHistory($model);
         }
 
         return $task;
     }
+
+    /**
+     * Check events for additional history
+     *
+     * @param Model $model
+     */
+    public function addHistory(Model $model)
+    {
+        $events = $model->get('events');
+        foreach ($events as $event) {
+            $this->processEvent($event);
+        }
+    }
+
+    /**
+     * Process an SWF event
+     *
+     * @param array $event
+     */
+    protected function processEvent(array $event)
+    {
+        // Get the workflow input (action ID)
+        if ($event['eventType'] == 'WorkflowExecutionStarted') {
+            $this->setActionId($event['workflowExecutionStartedEventAttributes']['input']);
+        }
+
+        // Check for activity failures
+        if ($event['eventType'] == 'ActivityTaskFailed') {
+            $this->fail('Failed: '.$event['activityTaskFailedEventAttributes']['reason']);
+        } elseif ($event['eventType'] == 'ActivityTaskCanceled') {
+            $this->fail('Canceled: '.$event['activityTaskCanceledEventAttributes']['details']);
+        } elseif ($event['eventType'] == 'ActivityTaskTimedOut') {
+            $this->fail('Timeout');
+        }
+    }
+
 } 
