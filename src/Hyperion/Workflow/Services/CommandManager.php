@@ -22,7 +22,6 @@ use Hyperion\Dbal\Enum\ProxyType;
 use Hyperion\Dbal\Exception\NotFoundException;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\Entity\WorkflowCommand;
-use Hyperion\Workflow\Enum\CommandType;
 use Hyperion\Workflow\Exception\CommandFailedException;
 use Hyperion\Workflow\Mappers\ProviderMapper;
 
@@ -105,7 +104,7 @@ class CommandManager
             throw new CommandFailedException("Command does not exist: ".$command->getCommand());
         }
 
-        return new $class($command, $service, $project, $environment, $this->pool);
+        return new $class($command, $service, $project, $environment, $this->pool, $this->dm);
     }
 
     /**

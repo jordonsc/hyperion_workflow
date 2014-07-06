@@ -8,6 +8,7 @@ use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Image\Resources\GenericImage;
 use Hyperion\Workflow\CommandDriver\Traits\ImageReportTrait;
+use Hyperion\Workflow\Enum\ActionPhase;
 use Hyperion\Workflow\Exception\CommandFailedException;
 
 /**

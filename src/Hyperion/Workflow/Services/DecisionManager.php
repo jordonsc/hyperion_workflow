@@ -9,11 +9,12 @@ use Hyperion\Dbal\Entity\Action;
 use Hyperion\Dbal\Enum\ActionState;
 use Hyperion\Dbal\Enum\ActionType;
 use Hyperion\Dbal\Enum\Entity;
+use Hyperion\Workflow\Decider\BakeDecider;
 use Hyperion\Workflow\Entity\DecisionTask;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Entity\WorkflowTask;
+use Hyperion\Workflow\Enum\ActionPhase;
 use Hyperion\Workflow\Enum\WorkflowResult;
-use Hyperion\Workflow\Exception\ParameterException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
@@ -246,6 +247,7 @@ class DecisionManager implements LoggerAwareInterface
         // Update action record via DBAL
         $action = $task->getAction();
         $action->setState(ActionState::COMPLETED());
+        $action->setPhase(ActionPhase::COMPLETE);
         $this->dm->update($action);
     }
 
@@ -275,12 +277,7 @@ class DecisionManager implements LoggerAwareInterface
         // Update action record via DBAL
         if ($action = $task->getAction()) {
             $action->setState(ActionState::FAILED());
-
-            // Save reason with the DBAL record
-            $data          = json_decode($action->getWorkflowData(), true);
-            $data['error'] = $reason;
-            $action->setWorkflowData(json_encode($data));
-
+            $action->setErrorMessage($reason);
             $this->dm->update($action);
         }
     }

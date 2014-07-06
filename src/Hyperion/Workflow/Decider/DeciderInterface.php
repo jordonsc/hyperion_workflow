@@ -1,5 +1,5 @@
 <?php
-namespace Hyperion\Workflow\Services;
+namespace Hyperion\Workflow\Decider;
 
 use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
