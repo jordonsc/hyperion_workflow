@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2430957935c29b0a0be826feba8753f",
+    "hash": "5499bc130bcdbab57e9cc124b1a1b3a8",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.8-beta",
+            "version": "0.0.10-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "357693e3c5c1e2880063b485cc17e358377f93a8"
+                "reference": "a748744f8c913af4fdec39a0bf78c7a9e9f75c25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/357693e3c5c1e2880063b485cc17e358377f93a8",
-                "reference": "357693e3c5c1e2880063b485cc17e358377f93a8",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/a748744f8c913af4fdec39a0bf78c7a9e9f75c25",
+                "reference": "a748744f8c913af4fdec39a0bf78c7a9e9f75c25",
                 "shasum": ""
             },
             "require": {
@@ -121,7 +121,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-07-06 04:14:23"
+            "time": "2014-07-06 07:35:36"
         },
         {
             "name": "bravo3/cache",

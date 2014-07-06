@@ -3,7 +3,6 @@ namespace Hyperion\Workflow\CommandDriver\Bakery;
 
 use Bravo3\Bakery\Bakery;
 use Bravo3\Bakery\Entity\Host;
-use Bravo3\Bakery\Entity\Repository as BakeRepository;
 use Bravo3\Bakery\Entity\Schema;
 use Bravo3\Bakery\Enum\Phase;
 use Bravo3\Bakery\Operation\CodeCheckoutOperation;
@@ -21,7 +20,6 @@ use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\Exception\CommandFailedException;
 use Hyperion\Workflow\Loggers\MemoryLogger;
-use Hyperion\Workflow\Loggers\OutputLogger;
 use Hyperion\Workflow\Mappers\PackagerTypeMapper;
 use Hyperion\Workflow\Mappers\RepositoryMapper;
 
@@ -73,7 +71,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
                     'PROJECT_ID'     => $prj->getId(),
                     'ENVIRONMENT_ID' => $env->getId(),
                     'INSTANCE_ID'    => $this->getConfig('instance-id'),
-                    'EVENT_ID'       => $this->command->getAction(),
+                    'ACTION_ID'      => $this->command->getAction(),
                 ]
             )
         );
@@ -113,6 +111,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             throw new CommandFailedException("Bakery failed (".$e->getMessage().")", 0, $e);
         } finally {
             $this->cleanPrivateKey();
+            $this->progress(null, $this->output->getLog());
         }
     }
 

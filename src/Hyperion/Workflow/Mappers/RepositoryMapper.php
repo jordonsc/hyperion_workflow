@@ -22,6 +22,7 @@ class RepositoryMapper
         $bake_repo->setPassword($repo->getPassword());
         $bake_repo->setPrivateKey($repo->getPrivateKey());
         $bake_repo->setCheckoutPath($repo->getCheckoutDirectory());
+        $bake_repo->setTag($repo->getTag());
         $bake_repo->setHostFingerprint($repo->getHostFingerprint());
         return$bake_repo;
     }

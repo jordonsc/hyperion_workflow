@@ -22,7 +22,7 @@
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
         "bravo3/cache": "~0.1",
-        "bravo3/bakery": "~0.0.8@beta",
+        "bravo3/bakery": "~0.0.10@beta",
         "bravo3/cloud-controller": "~0.1.1@beta",
         "predis/predis": "~0.8",
         "incenteev/composer-parameter-handler": "~2.0"
