@@ -1,5 +1,5 @@
 <?php
-namespace Hyperion\Workflow\Services;
+namespace Hyperion\Workflow\Decider;
 
 use Bravo3\CloudCtrl\Enum\ImageState;
 use Hyperion\Dbal\Entity\Project;
@@ -8,10 +8,10 @@ use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\InstanceState;
 use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
+use Hyperion\Workflow\Enum\ActionPhase;
 use Hyperion\Workflow\Enum\BakeStage;
 use Hyperion\Workflow\Enum\CommandType;
 use Hyperion\Workflow\Enum\WorkflowResult;
-use Hyperion\Workflow\Exception\CommandFailedException;
 
 class BakeDecider extends AbstractDecider implements DeciderInterface
 {
@@ -27,8 +27,6 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     public function getResult()
     {
-        $this->init();
-
         // State information
         $bake_stage = $this->getState(self::NS_STAGE, BakeStage::SPAWNING);
 
@@ -248,6 +246,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         $this->dbal->update($project);
 
         $this->setState(self::NS_STAGE, BakeStage::CLEANUP);
+        $this->progress(ActionPhase::CLEANUP);
         return WorkflowResult::COMMAND();
     }
 
@@ -268,6 +267,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
             $this->getNsPrefix().self::NS_IMAGE
         );
         $this->setState(self::NS_STAGE, BakeStage::SAVING);
+        $this->progress(ActionPhase::SAVING);
         return WorkflowResult::COMMAND();
     }
 
@@ -285,6 +285,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
             $this->getNsPrefix().self::NS_INSTANCE
         );
         $this->setState(self::NS_INSTANCE.'.0.state', InstanceState::PENDING);
+        $this->progress(ActionPhase::SPAWNING);
         return WorkflowResult::COMMAND();
     }
 
@@ -305,6 +306,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
         );
         $this->setState(self::NS_INSTANCE.'.0.state', InstanceState::STOPPING);
         $this->setState(self::NS_STAGE, BakeStage::SHUTDOWN);
+        $this->progress(ActionPhase::SHUTTING_DOWN);
         return WorkflowResult::COMMAND();
     }
 

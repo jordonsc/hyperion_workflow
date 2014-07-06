@@ -1,5 +1,5 @@
 <?php
-namespace Hyperion\Workflow\Services;
+namespace Hyperion\Workflow\Decider;
 
 use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
@@ -68,15 +68,6 @@ class AbstractDecider
     }
 
     /**
-     * Parse workflow data into the config, you can use this to read any parameters passed to the action
-     * via #getConfig()
-     */
-    protected function init()
-    {
-        $this->config = json_decode($this->action->getWorkflowData(), true);
-    }
-
-    /**
      * Get a real-time workflow state
      *
      * This will automatically prefix with the action ID
@@ -107,6 +98,28 @@ class AbstractDecider
         // NB: performance bump here, we really shouldn't need to pull before pushing :(
         $item = $this->pool->getItem($this->getNsPrefix().$key);
         $item->set($value, $ttl);
+    }
+
+    /**
+     * Update the action phase and/or output
+     *
+     * If either the phase or output or null, they will not be updated. In rare cases, a command driver may also
+     * have updated the progress (phase/output) to report on a long, single-threaded task.
+     *
+     * @param string $phase
+     * @param string $output
+     */
+    protected function progress($phase = null, $output = null)
+    {
+        if ($phase) {
+            $this->action->setPhase($phase);
+        }
+
+        if ($output) {
+            $this->action->setOutput($output);
+        }
+
+        $this->dbal->update($this->action);
     }
 
     /**

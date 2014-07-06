@@ -12,17 +12,17 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "symfony/yaml": "~2.5",
         "symfony/event-dispatcher": "~2.5",
         "symfony/console": "~2.5",
         "symfony/dependency-injection": "~2.5",
         "symfony/config": "~2.5",
-        "hyperion/dbal": "*@dev",
+        "hyperion/dbal": "~0.0.2@beta",
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
         "bravo3/cache": "~0.1",
-        "bravo3/bakery": "~0.0@beta",
+        "bravo3/bakery": "~0.0.7@beta",
         "bravo3/cloud-controller": "~0.1.1@beta",
         "predis/predis": "~0.8",
         "incenteev/composer-parameter-handler": "~2.0"

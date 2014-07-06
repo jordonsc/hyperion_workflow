@@ -4,6 +4,7 @@ namespace Hyperion\Workflow\CommandDriver\General;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
+use Hyperion\Workflow\Enum\ActionPhase;
 use Hyperion\Workflow\Exception\CommandFailedException;
 
 /**
@@ -42,7 +43,6 @@ class CheckConnectivityDriver extends AbstractCommandDriver implements CommandDr
             $this->setState($this->command->getResultNamespace().'.code', '');
             $this->setState($this->command->getResultNamespace().'.message', '');
         }
-
     }
 
 }

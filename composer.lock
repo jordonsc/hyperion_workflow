@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b4a35174a349686b51d18785a09be75b",
+    "hash": "668fd0620570468f7a2832f201a4e67e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.6.9",
+            "version": "2.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "266a857c23292d3b63be44465b5e1aff7aff87c0"
+                "reference": "11b56a0fc4b0e00c09d088cf31a64710653b46bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/266a857c23292d3b63be44465b5e1aff7aff87c0",
-                "reference": "266a857c23292d3b63be44465b5e1aff7aff87c0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/11b56a0fc4b0e00c09d088cf31a64710653b46bc",
+                "reference": "11b56a0fc4b0e00c09d088cf31a64710653b46bc",
                 "shasum": ""
             },
             "require": {
@@ -72,26 +72,26 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-06-26 21:08:57"
+            "time": "2014-07-02 20:42:09"
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.4-beta",
+            "version": "0.0.7-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e"
+                "reference": "751a442d10da52db52efad9317a6f5998fff001d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e",
-                "reference": "b542e20220c9f8ecfc3d35fc05bdc1bf99aba39e",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/751a442d10da52db52efad9317a6f5998fff001d",
+                "reference": "751a442d10da52db52efad9317a6f5998fff001d",
                 "shasum": ""
             },
             "require": {
                 "bravo3/ssh": "~1.4.3",
                 "bravo3/standards": "~1.0",
-                "php": ">=5.4.0"
+                "php": ">=5.5.0"
             },
             "require-dev": {
                 "phpunit/phpunit": ">=4.0.0"
@@ -121,7 +121,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-06-27 02:32:46"
+            "time": "2014-07-04 06:02:07"
         },
         {
             "name": "bravo3/cache",
@@ -783,16 +783,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "dev-master",
+            "version": "0.0.2-beta",
             "source": {
                 "type": "git",
                 "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "c38a0835235003a08d3f5f851f57ba5914cff98e"
+                "reference": "62f7b6a119696a9493cac2814f5690bdc9f8a99f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/c38a0835235003a08d3f5f851f57ba5914cff98e",
-                "reference": "c38a0835235003a08d3f5f851f57ba5914cff98e",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/62f7b6a119696a9493cac2814f5690bdc9f8a99f",
+                "reference": "62f7b6a119696a9493cac2814f5690bdc9f8a99f",
                 "shasum": ""
             },
             "require": {
@@ -833,7 +833,7 @@
                 "source": "https://github.com/jordonsc/hyperion_dbal/tree/master",
                 "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
             },
-            "time": "2014-06-26 06:26:38"
+            "time": "2014-07-04 01:36:18"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2206,12 +2206,12 @@
     ],
     "minimum-stability": "beta",
     "stability-flags": {
-        "hyperion/dbal": 20,
+        "hyperion/dbal": 10,
         "bravo3/bakery": 10,
         "bravo3/cloud-controller": 10
     },
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=5.5.0"
     },
     "platform-dev": [
 

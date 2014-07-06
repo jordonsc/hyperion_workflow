@@ -14,7 +14,6 @@ class CommandType extends AbstractEnumeration
     // Instance commands
     const LAUNCH_INSTANCE    = 'Instance\CreateInstanceDriver';
     const CHECK_INSTANCE     = 'Instance\CheckInstanceDriver';
-    const BAKE_INSTANCE      = 'Instance\BakeDriver';
     const SHUTDOWN_INSTANCE  = 'Instance\ShutdownInstanceDriver';
     const TERMINATE_INSTANCE = 'Instance\TerminateInstanceDriver';
     const RESTART_INSTANCE   = 'Instance\RestartInstanceDriver';
@@ -23,6 +22,10 @@ class CommandType extends AbstractEnumeration
     const CREATE_IMAGE     = 'Image\CreateImageDriver';
     const CHECK_IMAGE      = 'Image\CheckImageDriver';
     const DEREGISTER_IMAGE = 'Image\DeregisterImageDriver';
+
+    // Bakery Commands
+    const BAKE_INSTANCE = 'Bakery\BakeDriver';
+
 
     // IP commands
 
