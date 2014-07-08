@@ -24,8 +24,7 @@ class CommandType extends AbstractEnumeration
     const DEREGISTER_IMAGE = 'Image\DeregisterImageDriver';
 
     // Bakery Commands
-    const BAKE_INSTANCE = 'Bakery\BakeDriver';
-
+    const BAKE_INSTANCE  = 'Bakery\BakeDriver';
 
     // IP commands
 

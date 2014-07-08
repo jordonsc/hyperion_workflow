@@ -4,12 +4,15 @@ namespace Hyperion\Workflow\CommandDriver\Traits;
 use Bravo3\Cache\PoolInterface;
 use Bravo3\CloudCtrl\Collections\InstanceCollection;
 use Bravo3\CloudCtrl\Interfaces\Instance\InstanceInterface;
+use Hyperion\Dbal\DataManager;
+use Hyperion\Dbal\Entity\Instance;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Mappers\InstanceStateMapper;
 
 /**
  * @property WorkflowCommand $command
  * @property PoolInterface   $pool
+ * @property DataManager     $dbal
  * @method null setState($key, $value, $ttl = 3600)
  */
 trait InstanceReportTrait
@@ -20,13 +23,12 @@ trait InstanceReportTrait
      *
      * @param InstanceCollection $instances
      */
-    protected function saveAllInstancesReport(InstanceCollection $instances)
+    protected function saveAllInstancesReport(InstanceCollection $instances, $distrubution = null)
     {
         $instance_index = 0;
         foreach ($instances as $instance) {
-            $this->saveInstanceReport($instance_index++, $instance);
+            $this->saveInstanceReport($instance_index++, $instance, $distrubution);
         }
-
     }
 
     /**
@@ -35,7 +37,7 @@ trait InstanceReportTrait
      * @param int               $index
      * @param InstanceInterface $instance
      */
-    protected function saveInstanceReport($index, InstanceInterface $instance)
+    protected function saveInstanceReport($index, InstanceInterface $instance, $distribution = null)
     {
         $namespace = $this->command->getResultNamespace();
         if (!$namespace) {
@@ -72,6 +74,14 @@ trait InstanceReportTrait
         // State
         $state = InstanceStateMapper::CloudCtrlToDbal($instance->getInstanceState());
         $this->setState($namespace.'.'.$index.'.state', $state->value());
+
+        // Save instance to distribution
+        if ($distribution) {
+            $dbal_instance = new Instance();
+            $dbal_instance->setInstanceId($instance->getInstanceId());
+            $dbal_instance->setDistribution($distribution);
+            $this->dbal->create($dbal_instance);
+        }
 
     }
 

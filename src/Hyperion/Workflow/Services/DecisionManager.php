@@ -9,7 +9,7 @@ use Hyperion\Dbal\Entity\Action;
 use Hyperion\Dbal\Enum\ActionState;
 use Hyperion\Dbal\Enum\ActionType;
 use Hyperion\Dbal\Enum\Entity;
-use Hyperion\Workflow\Decider\BakeDecider;
+use Hyperion\Workflow\Decider\DeciderInterface;
 use Hyperion\Workflow\Entity\DecisionTask;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Entity\WorkflowTask;
@@ -134,12 +134,18 @@ class DecisionManager implements LoggerAwareInterface
         // Each action type has it's own decider - build it
         switch ($action->getActionType()) {
             case ActionType::BAKE():
-                $decider = new BakeDecider($action, $this->cache_pool, $this->dm);
+                $class = 'Hyperion\Workflow\Decider\BakeDecider';
+                break;
+            case ActionType::BUILD():
+                $class = 'Hyperion\Workflow\Decider\BuildDecider';
                 break;
             default:
                 $this->respondFailed($task, "Unknown action type (".$action->getActionType()->value().")");
                 return;
         }
+
+        /** @var DeciderInterface $decider */
+        $decider = new $class($action, $this->cache_pool, $this->dm);
 
         // Check for activity failures
         if ($task->hasFailed()) {

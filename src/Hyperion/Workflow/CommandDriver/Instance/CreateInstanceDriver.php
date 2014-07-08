@@ -3,6 +3,7 @@ namespace Hyperion\Workflow\CommandDriver\Instance;
 
 use Bravo3\CloudCtrl\Entity\Common\Zone;
 use Bravo3\CloudCtrl\Schema\InstanceSchema;
+use Hyperion\Dbal\Enum\EnvironmentType;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\InstanceReportTrait;
@@ -22,7 +23,11 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
         $count = $this->getConfig('count', 1);
 
         $schema = new InstanceSchema();
-        $schema->setTemplateImageId($p->getSourceImageId());
+        if ($e->getEnvironmentType() == EnvironmentType::BAKERY()) {
+            $schema->setTemplateImageId($p->getSourceImageId());
+        } else {
+            $schema->setTemplateImageId($p->getBakedImageId());
+        }
         $schema->setTenancy((string)$e->getTenancy());
         $schema->setInstanceSize($e->getInstanceSize());
         $schema->setFirewalls($e->getFirewalls());
@@ -43,7 +48,8 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
 
         if ($report->getSuccess()) {
             // Success, save details to provided cache pool
-            $this->saveAllInstancesReport($report->getInstances());
+            $this->initAction();
+            $this->saveAllInstancesReport($report->getInstances(), $this->action->getDistribution());
         } else {
             // Failed :(
             throw new CommandFailedException($report->getResultMessage());

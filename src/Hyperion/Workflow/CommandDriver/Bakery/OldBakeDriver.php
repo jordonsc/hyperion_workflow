@@ -18,20 +18,17 @@ use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\EnvironmentType;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
-use Hyperion\Workflow\CommandDriver\Traits\RemoteTrait;
 use Hyperion\Workflow\Exception\CommandFailedException;
 use Hyperion\Workflow\Loggers\MemoryLogger;
 use Hyperion\Workflow\Mappers\PackagerTypeMapper;
 use Hyperion\Workflow\Mappers\RepositoryMapper;
 
-/**
- * Bake or build a machine
- *
- * The differences between a bake, build and deploy will be determined by the environment type
- */
-class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
+class OldBakeDriver extends AbstractCommandDriver implements CommandDriverInterface
 {
-    use RemoteTrait;
+    /**
+     * @var string
+     */
+    private $pkey_file = null;
 
     /**
      * @var MemoryLogger
@@ -79,20 +76,18 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             )
         );
 
-        if ($this->isBakery()) {
-            // System packages
-            if ($prj->getUpdateSystemPackages()) {
-                $schema->addOperation(new UpdatePackagesOperation());
-            }
+        // System packages
+        if ($prj->getUpdateSystemPackages()) {
+            $schema->addOperation(new UpdatePackagesOperation());
+        }
 
-            if ($prj->getPackages()) {
-                $schema->addOperation(new InstallPackagesOperation($prj->getPackages()));
-            }
+        if ($prj->getPackages()) {
+            $schema->addOperation(new InstallPackagesOperation($prj->getPackages()));
+        }
 
-            // Bake script - first operation after system packages
-            if ($prj->getBakeScript()) {
-                $schema->addOperation(new ScriptOperation($prj->getBakeScript()));
-            }
+        // Bake script - first operation after system packages
+        if ($prj->getBakeScript()) {
+            $schema->addOperation(new ScriptOperation($prj->getBakeScript()));
         }
 
         // Add all repos
@@ -102,11 +97,6 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         /** @var Repository $repo */
         foreach ($repos as $repo) {
             $schema->addOperation(new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo)));
-        }
-
-        // Launch script
-        if (!$this->isBakery() && $prj->getLaunchScript()) {
-            $schema->addOperation(new ScriptOperation($prj->getBakeScript()));
         }
 
         // Environment script
@@ -139,5 +129,36 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $this->progress($phase->key(), $this->output->getLog());
     }
 
+    /**
+     * Create a file on the filesystem containing the private key file
+     *
+     * This file will be zeroed and removed, but it's (ephemeral) existence is a security concern.
+     *
+     * @param string $certificate
+     * @return string Filename to private key file
+     */
+    protected function createPrivateKey($certificate)
+    {
+        $temp_file = tempnam(sys_get_temp_dir(), 'bakery-');
+        chmod($temp_file, 0600);
+        file_put_contents($temp_file, $certificate);
+        $this->pkey_file = $temp_file;
+        return $temp_file;
+    }
+
+    /**
+     * Remove a generated private key file, if it exists
+     */
+    protected function cleanPrivateKey()
+    {
+        if ($this->pkey_file) {
+            // Zero the file out first so the data can't be recovered
+            $zero = str_repeat(chr(0), filesize($this->pkey_file));
+            file_put_contents($this->pkey_file, $zero);
+
+            // Delete
+            unlink($this->pkey_file);
+        }
+    }
 
 }

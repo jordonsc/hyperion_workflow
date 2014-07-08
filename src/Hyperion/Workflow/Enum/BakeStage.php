@@ -14,4 +14,3 @@ class BakeStage extends AbstractEnumeration
     const SAVING   = 40;
     const CLEANUP  = 50;
 }
- 

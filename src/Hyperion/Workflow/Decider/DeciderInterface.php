@@ -33,4 +33,15 @@ interface DeciderInterface
      */
     public function getCommands();
 
+    /**
+     * Called by the DecisionManager when the workflow completes
+     */
+    public function onComplete();
+
+    /**
+     * Called by the DecisionManager when the workflow fails
+     */
+    public function onFail();
+
+
 } 
