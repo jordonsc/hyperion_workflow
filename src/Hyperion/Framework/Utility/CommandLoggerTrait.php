@@ -2,7 +2,6 @@
 namespace Hyperion\Framework\Utility;
 
 use Hyperion\Framework\Command\ApplicationCommand;
-use Hyperion\Workflow\Services\FileLogger;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Input\InputInterface;

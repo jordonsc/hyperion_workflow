@@ -9,6 +9,7 @@ use Bravo3\Bakery\Operation\CodeCheckoutOperation;
 use Bravo3\Bakery\Operation\EnvironmentOperation;
 use Bravo3\Bakery\Operation\InstallPackagesOperation;
 use Bravo3\Bakery\Operation\ScriptOperation;
+use Bravo3\Bakery\Operation\StartServicesOperation;
 use Bravo3\Bakery\Operation\UpdatePackagesOperation;
 use Bravo3\SSH\Credentials\KeyCredential;
 use Bravo3\SSH\Credentials\PasswordCredential;
@@ -112,6 +113,11 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         // Environment script
         if ($env->getScript()) {
             $schema->addOperation(new ScriptOperation($env->getScript()));
+        }
+
+        if (!$this->isBakery()) {
+            // Start services
+            $schema->addOperation(new StartServicesOperation($prj->getServices()));
         }
 
         // Do the bakey bakey
