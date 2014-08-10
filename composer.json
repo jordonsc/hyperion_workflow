@@ -18,7 +18,6 @@
         "symfony/console": "~2.5",
         "symfony/dependency-injection": "~2.5",
         "symfony/config": "~2.5",
-        //"hyperion/dbal": "~0.0.2@beta",
         "hyperion/dbal": "*@dev",
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
