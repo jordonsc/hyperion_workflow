@@ -69,6 +69,10 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
             }
         }
 
+        // Copy over the environment
+        $env = $input->getOption('env');
+        $bin .= ' --env='.$env;
+
         // Carry on the verbosity level
         switch ($output->getVerbosity()) {
             case OutputInterface::VERBOSITY_QUIET:

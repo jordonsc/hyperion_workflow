@@ -518,7 +518,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -539,7 +539,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -692,16 +692,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.9.1",
+            "version": "v3.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle3.git",
-                "reference": "92d9934f2fca1da15178c91239576ae26e505e60"
+                "reference": "54991459675c1a2924122afbb0e5609ade581155"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/92d9934f2fca1da15178c91239576ae26e505e60",
-                "reference": "92d9934f2fca1da15178c91239576ae26e505e60",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/54991459675c1a2924122afbb0e5609ade581155",
+                "reference": "54991459675c1a2924122afbb0e5609ade581155",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +745,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.8-dev"
+                    "dev-master": "3.9-dev"
                 }
             },
             "autoload": {
@@ -780,7 +780,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-05-07 17:04:22"
+            "time": "2014-08-11 04:32:36"
         },
         {
             "name": "hyperion/dbal",
@@ -788,12 +788,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "c101b263c033aa3c01a11698d58b751caef4a1d3"
+                "reference": "9273dd9f81d481162d95863f5ebf3422533f4655"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/c101b263c033aa3c01a11698d58b751caef4a1d3",
-                "reference": "c101b263c033aa3c01a11698d58b751caef4a1d3",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/9273dd9f81d481162d95863f5ebf3422533f4655",
+                "reference": "9273dd9f81d481162d95863f5ebf3422533f4655",
                 "shasum": ""
             },
             "require": {
@@ -831,10 +831,10 @@
             },
             "description": "Hyperion DBAL and API client",
             "support": {
-                "source": "https://github.com/jordonsc/hyperion_dbal/tree/master",
+                "source": "https://github.com/jordonsc/hyperion_dbal/tree/0.0.3-beta",
                 "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
             },
-            "time": "2014-08-07 07:47:38"
+            "time": "2014-08-11 04:45:58"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2255,7 +2255,8 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net"
+                    "email": "aharvey@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Bernhard Schussek",

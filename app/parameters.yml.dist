@@ -4,3 +4,9 @@ parameters:
         secret:
         region: ap-southeast-2
         domain: hyperion_dev
+
+    hyperion.dbal:
+        hostname:  api.hyperion.dev
+
+    hyperion.cache-pool: tcp://127.0.0.1:6379
+

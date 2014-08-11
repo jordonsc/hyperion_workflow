@@ -97,9 +97,8 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         }
 
         // Add all repos
-        $criteria = new CriteriaCollection();
-        $criteria->add('project', $this->project->getId());
-        $repos = $this->dbal->search(Entity::REPOSITORY(), $criteria);
+        $repos = $this->dbal->getRelatedEntities($prj, Entity::REPOSITORY());
+
         /** @var Repository $repo */
         foreach ($repos as $repo) {
             $schema->addOperation(new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo)));
