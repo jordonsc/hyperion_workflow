@@ -32,13 +32,15 @@ class InstallCommand extends ApplicationCommand
         $filesystem = new Filesystem();
         $filesystem->copy($docs.'/hyperion-decider.conf', '/etc/init/hyperion-decider.conf', true);
         $filesystem->copy($docs.'/hyperion-worker.conf', '/etc/init/hyperion-worker.conf', true);
+        $filesystem->copy($docs.'/hyperion-deciders.conf', '/etc/init/hyperion-deciders.conf', true);
+        $filesystem->copy($docs.'/hyperion-workers.conf', '/etc/init/hyperion-workers.conf', true);
         $output->writeln("Upstart scripts created");
 
         $filesystem->symlink($bin, '/usr/bin/hyperiond');
         $output->writeln("Link to <comment>hyperiond</comment> created");
 
-        $output->writeln('<comment>'.exec('start hyperion-decider').'</comment>');
-        $output->writeln('<comment>'.exec('start hyperion-worker').'</comment>');
+        $output->writeln('<comment>'.exec('start hyperion-deciders').'</comment>');
+        $output->writeln('<comment>'.exec('start hyperion-workers').'</comment>');
         $output->writeln("Services started");
 
         $output->writeln("<info>Install complete</info>");
