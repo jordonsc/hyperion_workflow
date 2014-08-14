@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "73b30867ead9704f5f009c548b04f299",
+    "hash": "5b0d1640d50843121416f596ea6ce9fb",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.6.13",
+            "version": "2.6.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d1f345a65b490bd83fff735d8a9e49b224ce24b5"
+                "reference": "6ce450fa314edb9209671a0cd1930de55bd43123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d1f345a65b490bd83fff735d8a9e49b224ce24b5",
-                "reference": "d1f345a65b490bd83fff735d8a9e49b224ce24b5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6ce450fa314edb9209671a0cd1930de55bd43123",
+                "reference": "6ce450fa314edb9209671a0cd1930de55bd43123",
                 "shasum": ""
             },
             "require": {
@@ -72,7 +72,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-07-31 20:34:29"
+            "time": "2014-08-11 22:46:49"
         },
         {
             "name": "bravo3/bakery",
@@ -784,16 +784,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "dev-master",
+            "version": "0.0.4-beta",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jordonsc/hyperion_dbal.git",
-                "reference": "9273dd9f81d481162d95863f5ebf3422533f4655"
+                "url": "https://github.com/jordonsc/hyperion_dbal.git",
+                "reference": "791b0cbb33bbecd977ece1ea86bc699fe76e69f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/9273dd9f81d481162d95863f5ebf3422533f4655",
-                "reference": "9273dd9f81d481162d95863f5ebf3422533f4655",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/791b0cbb33bbecd977ece1ea86bc699fe76e69f9",
+                "reference": "791b0cbb33bbecd977ece1ea86bc699fe76e69f9",
                 "shasum": ""
             },
             "require": {
@@ -821,20 +821,23 @@
                     ]
                 }
             },
-            "scripts": {
-                "post-install-cmd": [
-
-                ],
-                "post-update-cmd": [
-
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordon Scott",
+                    "email": "jordon@novatek.com.au"
+                }
+            ],
             "description": "Hyperion DBAL and API client",
-            "support": {
-                "source": "https://github.com/jordonsc/hyperion_dbal/tree/0.0.3-beta",
-                "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
-            },
-            "time": "2014-08-11 04:45:58"
+            "keywords": [
+                "api client",
+                "hyperion",
+                "hyperion dbal"
+            ],
+            "time": "2014-08-14 00:23:31"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1547,16 +1550,16 @@
     "packages-dev": [
         {
             "name": "ocramius/instantiator",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/Instantiator.git",
-                "reference": "cc754c2289ffd4483c319f6ed6ee88ce21676f64"
+                "reference": "8aa99efa86c51319afc26d23254fe6a8b5a5144a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/Instantiator/zipball/cc754c2289ffd4483c319f6ed6ee88ce21676f64",
-                "reference": "cc754c2289ffd4483c319f6ed6ee88ce21676f64",
+                "url": "https://api.github.com/repos/Ocramius/Instantiator/zipball/8aa99efa86c51319afc26d23254fe6a8b5a5144a",
+                "reference": "8aa99efa86c51319afc26d23254fe6a8b5a5144a",
                 "shasum": ""
             },
             "require": {
@@ -1565,6 +1568,7 @@
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
+                "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpunit/phpunit": "~4.0",
                 "squizlabs/php_codesniffer": "2.0.*@ALPHA"
@@ -1588,8 +1592,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
-                    "role": "Developer"
+                    "homepage": "http://ocramius.github.com/"
                 }
             ],
             "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
@@ -1598,7 +1601,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-06-15 11:44:46"
+            "time": "2014-08-11 23:48:35"
         },
         {
             "name": "ocramius/lazy-map",
@@ -2312,7 +2315,7 @@
     ],
     "minimum-stability": "beta",
     "stability-flags": {
-        "hyperion/dbal": 20,
+        "hyperion/dbal": 10,
         "bravo3/bakery": 10,
         "bravo3/cloud-controller": 10
     },

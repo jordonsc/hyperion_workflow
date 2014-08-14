@@ -5,12 +5,6 @@
     "autoload": {
         "psr-0": { "": ["src/", "tests/"] }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/jordonsc/hyperion_dbal.git"
-        }
-    ],
     "require": {
         "php": ">=5.5.0",
         "symfony/yaml": "~2.5",
@@ -18,7 +12,7 @@
         "symfony/console": "~2.5",
         "symfony/dependency-injection": "~2.5",
         "symfony/config": "~2.5",
-        "hyperion/dbal": "*@dev",
+        "hyperion/dbal": "~0.0.4@beta",
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
         "bravo3/cache": "~0.1",
