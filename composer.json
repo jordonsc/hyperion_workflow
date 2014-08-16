@@ -12,11 +12,11 @@
         "symfony/console": "~2.5",
         "symfony/dependency-injection": "~2.5",
         "symfony/config": "~2.5",
-        "hyperion/dbal": "~0.0.4@beta",
+        "hyperion/dbal": "~0.0.5@beta",
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
         "bravo3/cache": "~0.1",
-        "bravo3/bakery": "~0.0.11@beta",
+        "bravo3/bakery": "~0.0.13@beta",
         "bravo3/cloud-controller": "~0.1.1@beta",
         "predis/predis": "~0.8",
         "incenteev/composer-parameter-handler": "~2.0"

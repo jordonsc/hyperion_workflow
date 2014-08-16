@@ -71,8 +71,8 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $schema->addOperation(
             new EnvironmentOperation(
                 [
-                    'ENV'            => EnvironmentType::BAKERY,
                     'PROJECT_ID'     => $prj->getId(),
+                    'ENV_TYPE'       => 'BAKERY',
                     'ENVIRONMENT_ID' => $env->getId(),
                     'INSTANCE_ID'    => $this->getConfig('instance-id'),
                     'ACTION_ID'      => $this->command->getAction(),
@@ -101,7 +101,11 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
 
         /** @var Repository $repo */
         foreach ($repos as $repo) {
-            $schema->addOperation(new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo)));
+            $proxy = null;
+            if ($repo->getProxy()) {
+                $proxy = $this->dbal->retrieve(Entity::PROXY(), $repo->getProxy());
+            }
+            $schema->addOperation(new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo, $proxy)));
         }
 
         // Launch script

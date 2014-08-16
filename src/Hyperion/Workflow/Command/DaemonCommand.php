@@ -94,13 +94,13 @@ class DaemonCommand extends ApplicationCommand implements LoggerAwareInterface
 
         // Loop until ctrl+c hit
         do {
-            $output = [];
+            $exec_output = [];
             $return_var = 0;
-            exec($bin, $output, $return_var);
+            exec($bin.' 2>&1', $exec_output, $return_var);
 
             // 0 for success, 2 for SIGINT caught and ignored until we're done
             if ($return_var !== 0 && $return_var !== 2) {
-                $this->log(LogLevel::ERROR, $daemon.": execution error (".$return_var.")", $output);
+                $this->log(LogLevel::ERROR, $daemon.": execution error (".$return_var.")", $exec_output);
             }
 
             $this->checkSignals();
