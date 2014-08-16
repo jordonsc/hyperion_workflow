@@ -17,7 +17,7 @@ services:
         arguments: [ '@hyperion.data_manager', '@hyperion.cache_pool' ]
     hyperion.decision_manager:
         class: Hyperion\Workflow\Services\DecisionManager
-        arguments: [ %swf%, %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.cache_pool' ]
+        arguments: [ %swf%, %hyperion.workflow%, '@hyperion.data_manager', '@hyperion.stack_manager', '@hyperion.cache_pool' ]
     hyperion.work_manager:
         class: Hyperion\Workflow\Services\WorkManager
         arguments: [ %swf%, %hyperion.workflow%, '@hyperion.command_driver' ]

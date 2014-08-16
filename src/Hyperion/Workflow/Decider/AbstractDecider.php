@@ -4,6 +4,7 @@ namespace Hyperion\Workflow\Decider;
 use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
+use Hyperion\Dbal\StackManager;
 use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 
@@ -31,6 +32,11 @@ class AbstractDecider
     protected $dbal;
 
     /**
+     * @var StackManager
+     */
+    protected $sm;
+
+    /**
      * @var WorkflowCommand[]
      */
     protected $commands = [];
@@ -40,11 +46,12 @@ class AbstractDecider
      */
     protected $reason = null;
 
-    function __construct(Action $action, PoolInterface $cache, DataManager $dbal)
+    function __construct(Action $action, PoolInterface $cache, DataManager $dbal, StackManager $sm)
     {
         $this->action = $action;
         $this->pool   = $cache;
         $this->dbal   = $dbal;
+        $this->sm     = $sm;
     }
 
     /**

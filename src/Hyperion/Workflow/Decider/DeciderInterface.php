@@ -4,13 +4,14 @@ namespace Hyperion\Workflow\Decider;
 use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
+use Hyperion\Dbal\StackManager;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\WorkflowResult;
 
 interface DeciderInterface
 {
 
-    function __construct(Action $action, PoolInterface $cache, DataManager $dbal);
+    function __construct(Action $action, PoolInterface $cache, DataManager $dbal, StackManager $sm);
 
     /**
      * Get the action that should be taken

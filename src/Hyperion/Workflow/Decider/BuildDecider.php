@@ -216,6 +216,7 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
     protected function tearDownPrevious()
     {
         // TODO: We need to trigger the previous build to tear-down
+        //$this->sm->tearDownOther($this->action->getEnvironment()->getId());
     }
 
 }

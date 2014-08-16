@@ -72,7 +72,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             new EnvironmentOperation(
                 [
                     'PROJECT_ID'     => $prj->getId(),
-                    'ENV_TYPE'       => 'BAKERY',
+                    'ENV_TYPE'       => $env->getEnvironmentType()->key(),
                     'ENVIRONMENT_ID' => $env->getId(),
                     'INSTANCE_ID'    => $this->getConfig('instance-id'),
                     'ACTION_ID'      => $this->command->getAction(),
@@ -86,7 +86,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
                 $schema->addOperation(new UpdatePackagesOperation());
             }
 
-            if ($prj->getPackages()) {
+            if (count($prj->getPackages())) {
                 $schema->addOperation(new InstallPackagesOperation($prj->getPackages()));
             }
 

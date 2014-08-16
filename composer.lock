@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af7887af156ae7469b6a3c58ee24b32f",
+    "hash": "973fabf3c92c62251ca9cce31ff7f16c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.13-beta",
+            "version": "0.0.14-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "f64908e735713512c145f4f4bd8b61dfc97340b9"
+                "reference": "3bd1722d632c6dbbf4b35db94699b4a9641c943c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/f64908e735713512c145f4f4bd8b61dfc97340b9",
-                "reference": "f64908e735713512c145f4f4bd8b61dfc97340b9",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/3bd1722d632c6dbbf4b35db94699b4a9641c943c",
+                "reference": "3bd1722d632c6dbbf4b35db94699b4a9641c943c",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-08-14 06:34:22"
+            "time": "2014-08-16 08:27:12"
         },
         {
             "name": "bravo3/cache",
@@ -519,7 +519,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -540,7 +540,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -785,16 +785,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "0.0.5-beta",
+            "version": "0.0.6-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordonsc/hyperion_dbal.git",
-                "reference": "21794823da51c349d1e7dd55714e5b589888ccb0"
+                "reference": "22e4e2f03abcb2b3e21a655509172bcd4dffe693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/21794823da51c349d1e7dd55714e5b589888ccb0",
-                "reference": "21794823da51c349d1e7dd55714e5b589888ccb0",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/22e4e2f03abcb2b3e21a655509172bcd4dffe693",
+                "reference": "22e4e2f03abcb2b3e21a655509172bcd4dffe693",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 "hyperion",
                 "hyperion dbal"
             ],
-            "time": "2014-08-14 07:27:00"
+            "time": "2014-08-16 08:24:41"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2259,8 +2259,7 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net",
-                    "role": "Lead"
+                    "email": "aharvey@php.net"
                 },
                 {
                     "name": "Bernhard Schussek",
