@@ -94,7 +94,7 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
     }
 
     /**
-     * Spawn a new bakery instance
+     * Spawn a new build instance
      *
      * @return WorkflowResult
      */
@@ -215,8 +215,8 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
      */
     protected function tearDownPrevious()
     {
-        // TODO: We need to trigger the previous build to tear-down
-        //$this->sm->tearDownOther($this->action->getEnvironment()->getId());
+        // Trigger the previous build(s) to tear-down
+        $this->sm->tearDownOther($this->action->getDistribution());
     }
 
 }

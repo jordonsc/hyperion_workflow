@@ -27,11 +27,15 @@ class TerminateInstanceDriver extends AbstractCommandDriver implements CommandDr
         // Spawn the instances
         $report = $this->service->getInstanceManager()->terminateInstances($instanceFilter);
 
-        if ($report->getSuccess()) {
+        if ($this->getConfig('ignore-failure', 0)) {
             $this->reportSuccess();
         } else {
-            $this->reportFailed($report->getResultMessage());
-            throw new CommandFailedException($report->getResultMessage());
+            if ($report->getSuccess()) {
+                $this->reportSuccess();
+            } else {
+                $this->reportFailed($report->getResultMessage());
+                throw new CommandFailedException($report->getResultMessage());
+            }
         }
 
     }

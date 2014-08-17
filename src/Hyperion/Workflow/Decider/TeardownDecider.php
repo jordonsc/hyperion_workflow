@@ -74,7 +74,8 @@ class TeardownDecider extends AbstractDecider implements DeciderInterface
                 $this->action,
                 CommandType::TERMINATE_INSTANCE,
                 [
-                    'instance-id' => $instance->getInstanceId(),
+                    'instance-id'    => $instance->getInstanceId(),
+                    'ignore-failure' => 1,  // in-case instance has already been terminated
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE.'.'.$index
             );

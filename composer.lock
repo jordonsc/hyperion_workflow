@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "973fabf3c92c62251ca9cce31ff7f16c",
+    "hash": "167b482279c6ca292f6db321ec54e0ff",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -785,16 +785,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "0.0.6-beta",
+            "version": "0.0.8-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordonsc/hyperion_dbal.git",
-                "reference": "22e4e2f03abcb2b3e21a655509172bcd4dffe693"
+                "reference": "d45f86df0221199ae9e380c7d6a0be2166d84944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/22e4e2f03abcb2b3e21a655509172bcd4dffe693",
-                "reference": "22e4e2f03abcb2b3e21a655509172bcd4dffe693",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/d45f86df0221199ae9e380c7d6a0be2166d84944",
+                "reference": "d45f86df0221199ae9e380c7d6a0be2166d84944",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 "hyperion",
                 "hyperion dbal"
             ],
-            "time": "2014-08-16 08:24:41"
+            "time": "2014-08-17 03:36:01"
         },
         {
             "name": "incenteev/composer-parameter-handler",
