@@ -92,11 +92,6 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             if (count($prj->getPackages())) {
                 $schema->addOperation(new InstallPackagesOperation($prj->getPackages()));
             }
-
-            // Bake script - first operation after system packages
-            if ($prj->getBakeScript()) {
-                $schema->addOperation(new ScriptOperation($prj->getBakeScript()));
-            }
         }
 
         // Add all repos
@@ -108,17 +103,32 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             if ($repo->getProxy()) {
                 $proxy = $this->dbal->retrieve(Entity::PROXY(), $repo->getProxy());
             }
-            $schema->addOperation(new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo, $proxy)));
+            $op = new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo, $proxy));
+            $op->setRunAsRoot(true);
+            $schema->addOperation($op);
         }
 
-        // Launch script
-        if (!$this->isBakery() && $prj->getLaunchScript()) {
-            $schema->addOperation(new ScriptOperation($prj->getBakeScript()));
+        if ($this->isBakery()) {
+            // Bake script
+            if ($prj->getBakeScript()) {
+                $op = new ScriptOperation($prj->getBakeScript());
+                $op->setRunAsRoot(true);
+                $schema->addOperation($op);
+            }
+        } else {
+            // Launch script
+            if ($prj->getLaunchScript()) {
+                $op = new ScriptOperation($prj->getBakeScript());
+                $op->setRunAsRoot(true);
+                $schema->addOperation($op);
+            }
         }
 
         // Environment script
         if ($env->getScript()) {
-            $schema->addOperation(new ScriptOperation($env->getScript()));
+            $op = new ScriptOperation($env->getScript());
+            $op->setRunAsRoot(true);
+            $schema->addOperation($op);
         }
 
         if (!$this->isBakery()) {
