@@ -4,6 +4,7 @@ namespace Hyperion\Workflow\Decider;
 use Bravo3\CloudCtrl\Enum\ImageState;
 use Hyperion\Dbal\Entity\Project;
 use Hyperion\Dbal\Enum\BakeStatus;
+use Hyperion\Dbal\Enum\DistributionStatus;
 use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\InstanceState;
 use Hyperion\Framework\Utility\ConfigTrait;
@@ -59,21 +60,19 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     protected function processCleanup()
     {
-        $term_state  = $this->getState(self::NS_STAGE.'.terminate');
         $dereg_state = $this->getState(self::NS_STAGE.'.deregister');
 
-        // Something failed (workflow will fail anyway)
-        if ($term_state === '0' || $dereg_state === '0') {
+        if ($dereg_state === '0') {
+            // Something failed (workflow will fail anyway)
             $this->reason = 'Cleanup failed';
             return WorkflowResult::FAIL();
-        }
-
-        // Everything is done
-        if ($term_state === '1' && $dereg_state === '1') {
-            // Project from DBAL
+        } elseif ($dereg_state === '1') {
+            // Everything is done
             return WorkflowResult::COMPLETE();
         }
 
+        // Nothing to do - wait for deregister task
+        // NB: this shouldn't happen as deregistering is the only thing in the cleanup phase
         return WorkflowResult::COMMAND();
     }
 
@@ -156,6 +155,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
 
         // Haven't created it yet
         if ($instance_state === null) {
+            $this->setDistributionStatus(DistributionStatus::BUILDING());
             $this->setBakeStatus(BakeStatus::BAKING());
             return $this->actionSpawnInstance();
         }
@@ -216,16 +216,6 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
             $this->reason = 'Unable to retrieve project from DBAL';
             return WorkflowResult::FAIL();
         }
-
-        // Terminate bake instance
-        $this->commands[] = new WorkflowCommand(
-            $this->action,
-            CommandType::TERMINATE_INSTANCE,
-            [
-                'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id'),
-            ],
-            $this->getNsPrefix().self::NS_STAGE.'.terminate'
-        );
 
         // Deregister former image
         if ($project->getBakedImageId()) {
@@ -392,7 +382,9 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     public function onComplete()
     {
+        $this->setDistributionStatus(DistributionStatus::ACTIVE());
         $this->setBakeStatus(BakeStatus::BAKED());
+        $this->tearDown();
     }
 
     /**
@@ -400,8 +392,9 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
      */
     public function onFail()
     {
+        $this->setDistributionStatus(DistributionStatus::FAILED());
         $this->setBakeStatus(BakeStatus::UNBAKED());
+        $this->tearDown();
     }
-
 
 }

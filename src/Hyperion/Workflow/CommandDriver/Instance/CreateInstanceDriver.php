@@ -32,10 +32,9 @@ class CreateInstanceDriver extends AbstractCommandDriver implements CommandDrive
         $schema->setInstanceSize($e->getInstanceSize());
         $schema->setFirewalls($e->getFirewalls());
         $schema->setTags($e->getTags());
-        $schema->setNetwork($e->getNetwork());
 
         $zones = [];
-        foreach ($p->getZones() as $zone) {
+        foreach ($e->getZones() as $zone) {
             $zones[] = new Zone($zone);
         }
         $schema->setZones($zones);

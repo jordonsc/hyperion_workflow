@@ -169,28 +169,6 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
         return WorkflowResult::COMMAND();
     }
 
-    /**
-     * Set the distribution status
-     *
-     * @param DistributionStatus $status
-     * @return bool
-     */
-    protected function setDistributionStatus(DistributionStatus $status)
-    {
-        if (!$this->action->getDistribution()) {
-            return false;
-        }
-
-        /** @var Distribution $distro */
-        $distro = $this->dbal->retrieve(Entity::DISTRIBUTION(), $this->action->getDistribution());
-        if (!$distro) {
-            return false;
-        }
-
-        $distro->setStatus($status);
-        $this->dbal->update($distro);
-        return true;
-    }
 
     /**
      * Called by the DecisionManager when the workflow completes
@@ -208,15 +186,6 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
     {
         $this->setDistributionStatus(DistributionStatus::FAILED());
         $this->tearDownPrevious();
-    }
-
-    /**
-     * Tear down all other distributions with the same name + project
-     */
-    protected function tearDownPrevious()
-    {
-        // Trigger the previous build(s) to tear-down
-        $this->sm->tearDownOther($this->action->getDistribution());
     }
 
 }

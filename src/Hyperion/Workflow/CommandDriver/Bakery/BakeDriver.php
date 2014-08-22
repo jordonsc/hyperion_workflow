@@ -17,6 +17,7 @@ use Hyperion\Dbal\Collection\CriteriaCollection;
 use Hyperion\Dbal\Entity\Repository;
 use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\EnvironmentType;
+use Hyperion\Dbal\Enum\Packager;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\RemoteTrait;
@@ -68,17 +69,19 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $schema = new Schema(PackagerTypeMapper::dbalToBakery($prj->getPackager()));
 
         // Set environment variables the bake scripts might want to use
-        $schema->addOperation(
-            new EnvironmentOperation(
-                [
-                    'PROJECT_ID'     => $prj->getId(),
-                    'ENV_TYPE'       => $env->getEnvironmentType()->key(),
-                    'ENVIRONMENT_ID' => $env->getId(),
-                    'INSTANCE_ID'    => $this->getConfig('instance-id'),
-                    'ACTION_ID'      => $this->command->getAction(),
-                ]
-            )
-        );
+        $environments = [
+            'PROJECT_ID'     => $prj->getId(),
+            'ENV_TYPE'       => $env->getEnvironmentType()->key(),
+            'ENVIRONMENT_ID' => $env->getId(),
+            'INSTANCE_ID'    => $this->getConfig('instance-id'),
+            'ACTION_ID'      => $this->command->getAction(),
+        ];
+
+        if ($prj->getPackager() == Packager::APT()) {
+            $environments['DEBIAN_FRONTEND'] = 'noninteractive';
+        }
+
+        $schema->addOperation(new EnvironmentOperation($environments));
 
         if ($this->isBakery()) {
             // System packages
@@ -127,7 +130,7 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         try {
             $bakery->bake($schema, 180);
         } catch (\Exception $e) {
-            throw new CommandFailedException("Bakery failed (".$e->getMessage().")", 0, $e);
+            throw new CommandFailedException($e->getMessage(), 0, $e);
         } finally {
             $this->cleanPrivateKey();
             $this->progress(null, $this->output->getLog());

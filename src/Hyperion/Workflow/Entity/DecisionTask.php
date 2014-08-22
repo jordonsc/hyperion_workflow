@@ -148,7 +148,7 @@ class DecisionTask extends WorkflowTask
 
         // Check for activity failures
         if ($event['eventType'] == 'ActivityTaskFailed') {
-            $this->fail('Failed: '.$event['activityTaskFailedEventAttributes']['reason']);
+            $this->fail($event['activityTaskFailedEventAttributes']['reason']);
         } elseif ($event['eventType'] == 'ActivityTaskCanceled') {
             $this->fail('Canceled: '.$event['activityTaskCanceledEventAttributes']['details']);
         } elseif ($event['eventType'] == 'ActivityTaskTimedOut') {

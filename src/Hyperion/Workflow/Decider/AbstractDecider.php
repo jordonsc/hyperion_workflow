@@ -4,6 +4,9 @@ namespace Hyperion\Workflow\Decider;
 use Bravo3\Cache\PoolInterface;
 use Hyperion\Dbal\DataManager;
 use Hyperion\Dbal\Entity\Action;
+use Hyperion\Dbal\Entity\Distribution;
+use Hyperion\Dbal\Enum\DistributionStatus;
+use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\StackManager;
 use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
@@ -154,6 +157,48 @@ class AbstractDecider
     {
     }
 
+    /**
+     * Set the distribution status
+     *
+     * @param DistributionStatus $status
+     * @return bool
+     */
+    protected function setDistributionStatus(DistributionStatus $status)
+    {
+        if (!$this->action->getDistribution()) {
+            return false;
+        }
+
+        /** @var Distribution $distro */
+        $distro = $this->dbal->retrieve(Entity::DISTRIBUTION(), $this->action->getDistribution());
+        if (!$distro) {
+            return false;
+        }
+
+        $distro->setStatus($status);
+        $this->dbal->update($distro);
+        return true;
+    }
+
+    /**
+     * Tear-down the current distribution
+     */
+    protected function tearDown()
+    {
+        if ($distro = $this->action->getDistribution()) {
+            $this->sm->tearDown($distro);
+        }
+    }
+
+    /**
+     * Tear down all other distributions with the same name + project
+     */
+    protected function tearDownPrevious()
+    {
+        if ($distro = $this->action->getDistribution()) {
+            $this->sm->tearDownOther($this->action->getDistribution());
+        }
+    }
 
 }
  

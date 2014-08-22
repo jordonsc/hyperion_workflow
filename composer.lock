@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "167b482279c6ca292f6db321ec54e0ff",
+    "hash": "2961cfb2f25b1dc4dd58ccfab4180899",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.14-beta",
+            "version": "0.0.16-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "3bd1722d632c6dbbf4b35db94699b4a9641c943c"
+                "reference": "2331026229ee138a519aca83550cfdbb43e6e75b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/3bd1722d632c6dbbf4b35db94699b4a9641c943c",
-                "reference": "3bd1722d632c6dbbf4b35db94699b4a9641c943c",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/2331026229ee138a519aca83550cfdbb43e6e75b",
+                "reference": "2331026229ee138a519aca83550cfdbb43e6e75b",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-08-16 08:27:12"
+            "time": "2014-08-22 03:15:50"
         },
         {
             "name": "bravo3/cache",
@@ -177,16 +177,16 @@
         },
         {
             "name": "bravo3/cloud-controller",
-            "version": "0.1.1-beta",
+            "version": "0.1.2-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/cloud-ctrl.git",
-                "reference": "1df3f5e501061429154c4bea71c044c27db96c2c"
+                "reference": "9dc43b8e40b4065d7b43e81ec177b2d13638e157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/cloud-ctrl/zipball/1df3f5e501061429154c4bea71c044c27db96c2c",
-                "reference": "1df3f5e501061429154c4bea71c044c27db96c2c",
+                "url": "https://api.github.com/repos/bravo3/cloud-ctrl/zipball/9dc43b8e40b4065d7b43e81ec177b2d13638e157",
+                "reference": "9dc43b8e40b4065d7b43e81ec177b2d13638e157",
                 "shasum": ""
             },
             "require": {
@@ -227,7 +227,7 @@
                 "cloud",
                 "google cloud"
             ],
-            "time": "2014-07-01 03:26:33"
+            "time": "2014-08-21 07:55:02"
         },
         {
             "name": "bravo3/network-proxy",
@@ -519,7 +519,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -540,7 +540,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -785,16 +785,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "0.0.8-beta",
+            "version": "0.0.9-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordonsc/hyperion_dbal.git",
-                "reference": "d45f86df0221199ae9e380c7d6a0be2166d84944"
+                "reference": "ad5a54706198084fd474af580896800496a31027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/d45f86df0221199ae9e380c7d6a0be2166d84944",
-                "reference": "d45f86df0221199ae9e380c7d6a0be2166d84944",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/ad5a54706198084fd474af580896800496a31027",
+                "reference": "ad5a54706198084fd474af580896800496a31027",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 "hyperion",
                 "hyperion dbal"
             ],
-            "time": "2014-08-17 03:36:01"
+            "time": "2014-08-22 00:59:37"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1912,16 +1912,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.2.0",
+            "version": "4.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "58db726aa45fe26bca93f692cb3d77e9a46b7830"
+                "reference": "a33fa68ece9f8c68589bfc2da8d2794e27b820bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/58db726aa45fe26bca93f692cb3d77e9a46b7830",
-                "reference": "58db726aa45fe26bca93f692cb3d77e9a46b7830",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a33fa68ece9f8c68589bfc2da8d2794e27b820bc",
+                "reference": "a33fa68ece9f8c68589bfc2da8d2794e27b820bc",
                 "shasum": ""
             },
             "require": {
@@ -1982,7 +1982,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-08-08 05:13:30"
+            "time": "2014-08-18 05:12:30"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2259,7 +2259,8 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net"
+                    "email": "aharvey@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Bernhard Schussek",
