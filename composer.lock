@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91096c5f1d43e74f5af23550932119c5",
+    "hash": "c7f55a2844205b490a4c53ec994850c1",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.17-beta",
+            "version": "0.0.18-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "f342cf77e4d05339fc7c49aa414a7612b49cf9b7"
+                "reference": "2025d61c6c550037c98198bbc50ea9cc862398df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/f342cf77e4d05339fc7c49aa414a7612b49cf9b7",
-                "reference": "f342cf77e4d05339fc7c49aa414a7612b49cf9b7",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/2025d61c6c550037c98198bbc50ea9cc862398df",
+                "reference": "2025d61c6c550037c98198bbc50ea9cc862398df",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-08-22 06:01:19"
+            "time": "2014-08-22 06:56:53"
         },
         {
             "name": "bravo3/cache",
@@ -519,7 +519,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -540,7 +540,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2259,8 +2259,7 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net",
-                    "role": "Lead"
+                    "email": "aharvey@php.net"
                 },
                 {
                     "name": "Bernhard Schussek",
