@@ -146,7 +146,8 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                 CommandType::CHECK_CONNECTIVITY,
                 [
                     'delay'   => self::CHECK_DELAY,
-                    'address' => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
+                    'address-private' => $this->getState(self::NS_INSTANCE.'.0.ip.private.ip4'),
+                    'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE.'.0.connectivity'
             );
@@ -158,7 +159,8 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                 CommandType::BAKE_INSTANCE,
                 [
                     'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id'),
-                    'address'     => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
+                    'address-private' => $this->getState(self::NS_INSTANCE.'.0.ip.private.ip4'),
+                    'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE
             );
