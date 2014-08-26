@@ -48,8 +48,8 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
 
         if (!$address) {
             // Check for a pub/priv address and pick using the environment network scope
-            $private = $this->getConfig('address-public');
-            $public  = $this->getConfig('address-private');
+            $private = $this->getConfig('address-private');
+            $public  = $this->getConfig('address-public');
             $address = $this->environment->getPrivateNetwork() ? $private : $public;
 
             if (!$address) {
