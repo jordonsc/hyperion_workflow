@@ -228,7 +228,8 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 $this->getNsPrefix().self::NS_STAGE.'.deregister'
             );
         } else {
-            $this->setState(self::NS_STAGE.'.deregister', '1');
+            // Nothing else to do!
+            return WorkflowResult::COMPLETE();
         }
 
         // Update DBAL with new image
