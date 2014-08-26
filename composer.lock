@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c7f55a2844205b490a4c53ec994850c1",
+    "hash": "b81c1501ef42802b1613c82408477860",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.18-beta",
+            "version": "0.0.20-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "2025d61c6c550037c98198bbc50ea9cc862398df"
+                "reference": "f5f3ea62638924461e1e09529e11acd17bb02c40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/2025d61c6c550037c98198bbc50ea9cc862398df",
-                "reference": "2025d61c6c550037c98198bbc50ea9cc862398df",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/f5f3ea62638924461e1e09529e11acd17bb02c40",
+                "reference": "f5f3ea62638924461e1e09529e11acd17bb02c40",
                 "shasum": ""
             },
             "require": {
@@ -106,7 +106,14 @@
                     ]
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "post-install-cmd": [
+
+                ],
+                "post-update-cmd": [
+
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -122,7 +129,11 @@
                 "cloud",
                 "ssh"
             ],
-            "time": "2014-08-22 06:56:53"
+            "support": {
+                "source": "https://github.com/bravo3/bakery/tree/0.0.20-beta",
+                "issues": "https://github.com/bravo3/bakery/issues"
+            },
+            "time": "2014-08-25 06:22:57"
         },
         {
             "name": "bravo3/cache",
@@ -519,7 +530,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -540,7 +551,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -785,16 +796,16 @@
         },
         {
             "name": "hyperion/dbal",
-            "version": "0.0.9-beta",
+            "version": "0.0.10-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordonsc/hyperion_dbal.git",
-                "reference": "ad5a54706198084fd474af580896800496a31027"
+                "reference": "539bb28c282204da7d808d38b7cbb3a44cef19a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/ad5a54706198084fd474af580896800496a31027",
-                "reference": "ad5a54706198084fd474af580896800496a31027",
+                "url": "https://api.github.com/repos/jordonsc/hyperion_dbal/zipball/539bb28c282204da7d808d38b7cbb3a44cef19a9",
+                "reference": "539bb28c282204da7d808d38b7cbb3a44cef19a9",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +833,14 @@
                     ]
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "post-install-cmd": [
+
+                ],
+                "post-update-cmd": [
+
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -838,7 +856,11 @@
                 "hyperion",
                 "hyperion dbal"
             ],
-            "time": "2014-08-22 00:59:37"
+            "support": {
+                "source": "https://github.com/jordonsc/hyperion_dbal/tree/0.0.10-beta",
+                "issues": "https://github.com/jordonsc/hyperion_dbal/issues"
+            },
+            "time": "2014-08-26 01:30:26"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1551,16 +1573,16 @@
     "packages-dev": [
         {
             "name": "ocramius/instantiator",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/Instantiator.git",
-                "reference": "a7abbb5fc9df6e7126af741dd6c140d1a7369435"
+                "reference": "e24a12178906ff2e7471b8aaf3a0eb789b59f881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/Instantiator/zipball/a7abbb5fc9df6e7126af741dd6c140d1a7369435",
-                "reference": "a7abbb5fc9df6e7126af741dd6c140d1a7369435",
+                "url": "https://api.github.com/repos/Ocramius/Instantiator/zipball/e24a12178906ff2e7471b8aaf3a0eb789b59f881",
+                "reference": "e24a12178906ff2e7471b8aaf3a0eb789b59f881",
                 "shasum": ""
             },
             "require": {
@@ -1602,7 +1624,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-08-14 15:10:55"
+            "time": "2014-08-25 14:48:16"
         },
         {
             "name": "ocramius/lazy-map",
@@ -2259,7 +2281,8 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net"
+                    "email": "aharvey@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Bernhard Schussek",

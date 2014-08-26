@@ -5,6 +5,12 @@
     "autoload": {
         "psr-0": { "": ["src/", "tests/"] }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:jordonsc/hyperion_dbal.git"
+        }
+    ],
     "require": {
         "php": ">=5.5.0",
         "symfony/yaml": "~2.5",
@@ -12,11 +18,11 @@
         "symfony/console": "~2.5",
         "symfony/dependency-injection": "~2.5",
         "symfony/config": "~2.5",
-        "hyperion/dbal": "~0.0.9@beta",
         "aws/aws-sdk-php": "~2.6",
         "bravo3/standards": "~1.0",
         "bravo3/cache": "~0.1",
-        "bravo3/bakery": "~0.0.18@beta",
+        "hyperion/dbal": "~0.0.10@beta",
+        "bravo3/bakery": "~0.0.20@beta",
         "bravo3/cloud-controller": "~0.1.2@beta",
         "predis/predis": "~0.8",
         "incenteev/composer-parameter-handler": "~2.0"

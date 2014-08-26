@@ -20,7 +20,14 @@ class CheckConnectivityDriver extends AbstractCommandDriver implements CommandDr
         $timeout = max(1, (int)$this->getConfig('timeout', 5));
 
         if (!$address) {
-            throw new CommandFailedException("Require an `address` and `port`");
+            // Check for a pub/priv address and pick using the environment network scope
+            $private = $this->getConfig('address-public');
+            $public  = $this->getConfig('address-private');
+            $address = $this->environment->getPrivateNetwork() ? $private : $public;
+
+            if (!$address) {
+                throw new CommandFailedException("Require an `address` or an `address-public` and `address-private` combo");
+            }
         }
 
         // Wait-check option -

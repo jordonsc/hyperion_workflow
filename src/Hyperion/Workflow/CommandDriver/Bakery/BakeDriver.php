@@ -46,6 +46,17 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $env     = $this->environment;
         $address = $this->getConfig('address');
 
+        if (!$address) {
+            // Check for a pub/priv address and pick using the environment network scope
+            $private = $this->getConfig('address-public');
+            $public  = $this->getConfig('address-private');
+            $address = $this->environment->getPrivateNetwork() ? $private : $public;
+
+            if (!$address) {
+                throw new CommandFailedException("Require an `address` or an `address-public` and `address-private` combo");
+            }
+        }
+
         // Prep the bakery service
         if ($env->getSshPkey()) {
             $pkey       = $this->createPrivateKey($env->getSshPkey());
