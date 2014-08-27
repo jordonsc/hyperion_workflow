@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "11dd855f519ada8c60053e27742cd81d",
+    "hash": "58781313fd483738f69349b748478527",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,21 +76,21 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.22-beta",
+            "version": "0.0.23-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "8af91f2a93a73af4a9a3594d5d167d4c42404aaa"
+                "reference": "372122c04bdfdbe719cdd536d788f7a04d7d622d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/8af91f2a93a73af4a9a3594d5d167d4c42404aaa",
-                "reference": "8af91f2a93a73af4a9a3594d5d167d4c42404aaa",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/372122c04bdfdbe719cdd536d788f7a04d7d622d",
+                "reference": "372122c04bdfdbe719cdd536d788f7a04d7d622d",
                 "shasum": ""
             },
             "require": {
                 "bravo3/network-proxy": "~1.1.0",
-                "bravo3/ssh": "~1.5.0",
+                "bravo3/ssh": "~1.5.1",
                 "bravo3/standards": "~1.0",
                 "php": ">=5.5.0"
             },
@@ -130,10 +130,10 @@
                 "ssh"
             ],
             "support": {
-                "source": "https://github.com/bravo3/bakery/tree/0.0.22-beta",
+                "source": "https://github.com/bravo3/bakery/tree/master",
                 "issues": "https://github.com/bravo3/bakery/issues"
             },
-            "time": "2014-08-27 05:46:43"
+            "time": "2014-08-27 06:29:24"
         },
         {
             "name": "bravo3/cache",
@@ -327,16 +327,16 @@
         },
         {
             "name": "bravo3/ssh",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/ssh.git",
-                "reference": "dff4145fccbd06f79bbff21aed3aebac14661d37"
+                "reference": "181a072615e499a99174350290bb666bd14aa3f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/ssh/zipball/dff4145fccbd06f79bbff21aed3aebac14661d37",
-                "reference": "dff4145fccbd06f79bbff21aed3aebac14661d37",
+                "url": "https://api.github.com/repos/bravo3/ssh/zipball/181a072615e499a99174350290bb666bd14aa3f3",
+                "reference": "181a072615e499a99174350290bb666bd14aa3f3",
                 "shasum": ""
             },
             "require": {
@@ -373,7 +373,7 @@
                 "ssh",
                 "ssh2"
             ],
-            "time": "2014-07-06 03:34:32"
+            "time": "2014-08-27 06:25:14"
         },
         {
             "name": "bravo3/standards",
