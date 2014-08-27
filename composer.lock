@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7667c3c3736f52795453971dcbb6ba72",
+    "hash": "11dd855f519ada8c60053e27742cd81d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -76,16 +76,16 @@
         },
         {
             "name": "bravo3/bakery",
-            "version": "0.0.21-beta",
+            "version": "0.0.22-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravo3/bakery.git",
-                "reference": "b3aabbea1906dfc5ffe8ccbd033160198ed03ec0"
+                "reference": "8af91f2a93a73af4a9a3594d5d167d4c42404aaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravo3/bakery/zipball/b3aabbea1906dfc5ffe8ccbd033160198ed03ec0",
-                "reference": "b3aabbea1906dfc5ffe8ccbd033160198ed03ec0",
+                "url": "https://api.github.com/repos/bravo3/bakery/zipball/8af91f2a93a73af4a9a3594d5d167d4c42404aaa",
+                "reference": "8af91f2a93a73af4a9a3594d5d167d4c42404aaa",
                 "shasum": ""
             },
             "require": {
@@ -130,10 +130,10 @@
                 "ssh"
             ],
             "support": {
-                "source": "https://github.com/bravo3/bakery/tree/0.0.21-beta",
+                "source": "https://github.com/bravo3/bakery/tree/0.0.22-beta",
                 "issues": "https://github.com/bravo3/bakery/issues"
             },
-            "time": "2014-08-26 02:15:33"
+            "time": "2014-08-27 05:46:43"
         },
         {
             "name": "bravo3/cache",
