@@ -48,6 +48,8 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $env     = $this->environment;
         $address = $this->getConfig('address');
 
+        $this->initAction();
+
         /** @var Distribution $distro */
         if ($this->action->getDistribution()) {
             $distro = $this->dbal->retrieve(Entity::DISTRIBUTION(), $this->action->getDistribution());
