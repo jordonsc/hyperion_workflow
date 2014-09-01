@@ -14,10 +14,12 @@ use Bravo3\Bakery\Operation\UpdatePackagesOperation;
 use Bravo3\SSH\Credentials\KeyCredential;
 use Bravo3\SSH\Credentials\PasswordCredential;
 use Hyperion\Dbal\Collection\CriteriaCollection;
+use Hyperion\Dbal\Entity\Distribution;
 use Hyperion\Dbal\Entity\Repository;
 use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\EnvironmentType;
 use Hyperion\Dbal\Enum\Packager;
+use Hyperion\Dbal\Utility\TagStringHelper;
 use Hyperion\Workflow\CommandDriver\AbstractCommandDriver;
 use Hyperion\Workflow\CommandDriver\CommandDriverInterface;
 use Hyperion\Workflow\CommandDriver\Traits\RemoteTrait;
@@ -45,6 +47,14 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         $prj     = $this->project;
         $env     = $this->environment;
         $address = $this->getConfig('address');
+
+        /** @var Distribution $distro */
+        if ($this->action->getDistribution()) {
+            $distro = $this->dbal->retrieve(Entity::DISTRIBUTION(), $this->action->getDistribution());
+        } else {
+            $distro = null;
+        }
+
 
         if (!$address) {
             // Check for a pub/priv address and pick using the environment network scope
@@ -108,13 +118,24 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
         // Add all repos
         $repos = $this->dbal->getRelatedEntities($prj, Entity::REPOSITORY());
 
+        $helper     = new TagStringHelper();
+        $tag_string = $distro->getTagString();
+        $tags       = $helper->parseTagString($tag_string);
+
         /** @var Repository $repo */
         foreach ($repos as $repo) {
             $proxy = null;
             if ($repo->getProxy()) {
                 $proxy = $this->dbal->retrieve(Entity::PROXY(), $repo->getProxy());
             }
-            $op = new CodeCheckoutOperation(RepositoryMapper::DbalToBakery($repo, $proxy));
+
+            $payload = RepositoryMapper::DbalToBakery($repo, $proxy);
+
+            if (isset($tags[$repo->getId()])) {
+                $payload->setTag($tags[$repo->getId()]);
+            }
+
+            $op = new CodeCheckoutOperation($payload);
             $op->setRunAsRoot(true);
             $schema->addOperation($op);
         }
