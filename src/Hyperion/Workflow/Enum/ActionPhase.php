@@ -12,6 +12,7 @@ final class ActionPhase extends AbstractEnumeration
     const SLEEPING      = 'SLEEPING';
     const CONNECTING    = 'CONNECTING';
     const SAVING        = 'SAVING';
+    const CONFIGURING   = 'CONFIGURING';
     const CLEANUP       = 'CLEANUP';
     const SPAWNING      = 'SPAWNING';
     const SHUTTING_DOWN = 'SHUTTING_DOWN';

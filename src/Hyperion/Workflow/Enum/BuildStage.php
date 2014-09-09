@@ -6,8 +6,9 @@ use Eloquent\Enumeration\AbstractEnumeration;
 /**
  * Stage of the build (CI) process
  */
-class BuildStage extends AbstractEnumeration
+final class BuildStage extends AbstractEnumeration
 {
-    const SPAWNING = 0;
-    const BUILDING = 10;
+    const SPAWNING    = 0;
+    const BUILDING    = 10;
+    const CONFIGURING = 20;
 }

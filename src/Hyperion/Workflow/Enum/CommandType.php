@@ -10,6 +10,7 @@ class CommandType extends AbstractEnumeration
 {
     // Generic commands
     const CHECK_CONNECTIVITY = 'General\CheckConnectivityDriver';
+    const BIND_DNS           = 'General\DnsDriver';
 
     // Instance commands
     const LAUNCH_INSTANCE    = 'Instance\CreateInstanceDriver';
@@ -24,7 +25,7 @@ class CommandType extends AbstractEnumeration
     const DEREGISTER_IMAGE = 'Image\DeregisterImageDriver';
 
     // Bakery Commands
-    const BAKE_INSTANCE  = 'Bakery\BakeDriver';
+    const BAKE_INSTANCE = 'Bakery\BakeDriver';
 
     // IP commands
 

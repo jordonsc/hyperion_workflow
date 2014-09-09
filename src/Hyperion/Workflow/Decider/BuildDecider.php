@@ -3,6 +3,7 @@ namespace Hyperion\Workflow\Decider;
 
 use Bravo3\CloudCtrl\Enum\ImageState;
 use Hyperion\Dbal\Entity\Distribution;
+use Hyperion\Dbal\Entity\Environment;
 use Hyperion\Dbal\Entity\Project;
 use Hyperion\Dbal\Enum\BakeStatus;
 use Hyperion\Dbal\Enum\DistributionStatus;
@@ -13,14 +14,18 @@ use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\ActionPhase;
 use Hyperion\Workflow\Enum\BakeStage;
 use Hyperion\Workflow\Enum\BuildStage;
+use Hyperion\Workflow\Enum\ChangeType;
 use Hyperion\Workflow\Enum\CommandType;
 use Hyperion\Workflow\Enum\WorkflowResult;
+use Hyperion\Workflow\Exception\UnexpectedValueException;
 
 class BuildDecider extends AbstractDecider implements DeciderInterface
 {
     const NS_STAGE    = 'stage';
     const NS_INSTANCE = 'instance';
     const CHECK_DELAY = 5;
+    const DEFAULT_DNS_TTL = 60;
+    const DEFAULT_DNS_RECORD_TYPE = 'A';
 
     /**
      * Get the action that should be taken
@@ -39,6 +44,8 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
             // Build complete, close
             case BuildStage::BUILDING:
                 return $this->processCleanup();
+            case BuildStage::CONFIGURING:
+                return WorkflowResult::COMPLETE();
             // Default
             default:
                 $this->reason = "Workflow default at stage '".$build_stage."'";
@@ -53,7 +60,46 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
      */
     protected function processCleanup()
     {
-        return WorkflowResult::COMPLETE();
+        // Check if we should be binding a DNS record against this build
+        /** @var Environment $env */
+        $env = $this->dbal->retrieve(Entity::ENVIRONMENT(), $this->action->getEnvironment());
+        if (!$env) {
+            throw new UnexpectedValueException("Unknown environment ID (".$this->action->getEnvironment().")");
+        }
+
+        if ($env->getDnsZone()) {
+            // Need to add a DNZ zone
+            return $this->actionDns($env);
+        } else {
+            // Nothing else to do
+            return WorkflowResult::COMPLETE();
+        }
+    }
+
+    /**
+     * Bind a DNS entry to the build
+     *
+     * @return WorkflowResult
+     */
+    protected function actionDns(Environment $env)
+    {
+        $this->commands[] = new WorkflowCommand(
+            $this->action,
+            CommandType::BIND_DNS,
+            [
+                'action' => ChangeType::UPDATE,
+                'zone'   => $env->getDnsZone(),
+                'name'   => $env->getDnsName(),
+                'type'   => self::DEFAULT_DNS_RECORD_TYPE,
+                'ttl'    => (int)$env->getDnsTtl() ? : self::DEFAULT_DNS_TTL,
+                'value'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
+            ],
+            $this->getNsPrefix().self::NS_INSTANCE
+        );
+        $this->setState(self::NS_INSTANCE.'.0.state', InstanceState::PENDING);
+        $this->setState(self::NS_STAGE, BuildStage::CONFIGURING);
+        $this->progress(ActionPhase::CONFIGURING);
+        return WorkflowResult::COMMAND();
     }
 
     /**
@@ -145,7 +191,7 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                 $this->action,
                 CommandType::CHECK_CONNECTIVITY,
                 [
-                    'delay'   => self::CHECK_DELAY,
+                    'delay'           => self::CHECK_DELAY,
                     'address-private' => $this->getState(self::NS_INSTANCE.'.0.ip.private.ip4'),
                     'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
@@ -158,7 +204,7 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                 $this->action,
                 CommandType::BAKE_INSTANCE,
                 [
-                    'instance-id' => $this->getState(self::NS_INSTANCE.'.0.instance-id'),
+                    'instance-id'     => $this->getState(self::NS_INSTANCE.'.0.instance-id'),
                     'address-private' => $this->getState(self::NS_INSTANCE.'.0.ip.private.ip4'),
                     'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
