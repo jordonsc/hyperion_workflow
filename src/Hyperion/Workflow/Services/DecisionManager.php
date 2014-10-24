@@ -152,6 +152,12 @@ class DecisionManager implements LoggerAwareInterface
             case ActionType::BUILD():
                 $class = 'Hyperion\Workflow\Decider\BuildDecider';
                 break;
+            case ActionType::DEPLOY_ASG():
+                $class = 'Hyperion\Workflow\Decider\DeployAsgDecider';
+                break;
+            case ActionType::DEPLOY_MANAGED():
+                $class = 'Hyperion\Workflow\Decider\DeployManagedDecider';
+                break;
             case ActionType::TEAR_DOWN():
                 $class = 'Hyperion\Workflow\Decider\TeardownDecider';
                 break;

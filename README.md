@@ -53,14 +53,15 @@ Install
 =======
 This project requires PHP-SSH2, which can be installed with `pecl`:
 
+Ubuntu:
+
+    apt-get install libssh2-php
+
+Fedora/Centos/Redhat:
+
     yum install libssh2-devel
-    # apt-get install libssh2-1-dev php-pear php5-dev
     yes '' | pecl install -f ssh2
     echo "extension=ssh2.so" > /etc/php.d/ssh2.ini
-    # echo "extension=ssh2.so" > /etc/php5/mods-available/ssh2.ini
-    # ln -s /etc/php5/mods-available/ssh2.ini /etc/php5/apache2/conf.d/20-ssh2.ini
-    # ln -s /etc/php5/mods-available/ssh2.ini /etc/php5/cli/conf.d/20-ssh2.ini
-
 
 System Services
 ===============

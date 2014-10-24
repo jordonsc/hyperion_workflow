@@ -37,7 +37,7 @@ Workflow Setup
 
 To test the workflow you need to run the decider and worker in daemon mode:
 
-`./hyperiond daemon deider -l /tmp/decider.log`
+`./hyperiond daemon decider -l /tmp/decider.log`
 `./hyperiond daemon worker -l /tmp/worker.log`
 
 You can then tail the log files to keep an eye on what is happening. It's perfectly fine to make them the same file.
