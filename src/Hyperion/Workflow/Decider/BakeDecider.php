@@ -217,8 +217,17 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
             return WorkflowResult::FAIL();
         }
 
+        $old_image = $project->getBakedImageId();
+
+        // Update DBAL with new image
+        $project->setBakedImageId($this->getState(self::NS_IMAGE.'.id'));
+        $this->dbal->update($project);
+
+        $this->setState(self::NS_STAGE, BakeStage::CLEANUP);
+        $this->progress(ActionPhase::CLEANUP);
+
         // Deregister former image
-        if ($project->getBakedImageId()) {
+        if ($old_image) {
             $this->commands[] = new WorkflowCommand(
                 $this->action,
                 CommandType::DEREGISTER_IMAGE,
@@ -227,18 +236,12 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 ],
                 $this->getNsPrefix().self::NS_STAGE.'.deregister'
             );
+
+            return WorkflowResult::COMMAND();
         } else {
             // Nothing else to do!
             return WorkflowResult::COMPLETE();
         }
-
-        // Update DBAL with new image
-        $project->setBakedImageId($this->getState(self::NS_IMAGE.'.id'));
-        $this->dbal->update($project);
-
-        $this->setState(self::NS_STAGE, BakeStage::CLEANUP);
-        $this->progress(ActionPhase::CLEANUP);
-        return WorkflowResult::COMMAND();
     }
 
     /**
