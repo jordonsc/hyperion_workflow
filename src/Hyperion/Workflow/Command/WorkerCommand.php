@@ -56,6 +56,7 @@ class WorkerCommand extends ApplicationCommand implements LoggerAwareInterface
                     'File: '.$e->getFile(),
                     'Line: '.$e->getLine(),
                     'Code: '.$e->getCode(),
+                    'Trace: '.$e->getTraceAsString(),
                 ]
             );
 
