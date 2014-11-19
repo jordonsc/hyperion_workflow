@@ -232,7 +232,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                 $this->action,
                 CommandType::DEREGISTER_IMAGE,
                 [
-                    'image-id' => $project->getBakedImageId(),
+                    'image-id' => $old_image,
                 ],
                 $this->getNsPrefix().self::NS_STAGE.'.deregister'
             );
