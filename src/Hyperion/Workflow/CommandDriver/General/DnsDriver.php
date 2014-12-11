@@ -104,7 +104,7 @@ class DnsDriver extends AbstractCommandDriver implements CommandDriverInterface
         $out = '';
         for ($i = 0; $i < strlen($value); $i++) {
             $c = strtolower($value{$i});
-            if (ctype_alnum($c) || ($c == '.')) {
+            if (ctype_alnum($c) || ($c == '.' || ($c == '*'))) {
                 $out .= $c;
             } else {
                 $out .= '-';
