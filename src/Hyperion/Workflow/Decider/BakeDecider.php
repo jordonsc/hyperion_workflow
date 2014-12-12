@@ -356,7 +356,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                     'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE,
-                1800
+                3600
             );
 
             $this->setState(self::NS_STAGE, BakeStage::BAKING);
