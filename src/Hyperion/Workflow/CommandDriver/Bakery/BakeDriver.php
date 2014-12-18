@@ -27,6 +27,7 @@ use Hyperion\Workflow\Exception\CommandFailedException;
 use Hyperion\Workflow\Loggers\MemoryLogger;
 use Hyperion\Workflow\Mappers\PackagerTypeMapper;
 use Hyperion\Workflow\Mappers\RepositoryMapper;
+use Hyperion\Workflow\Services\DnsParser;
 
 /**
  * Bake or build a machine
@@ -99,6 +100,13 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
             'INSTANCE_ID'    => $this->getConfig('instance-id'),
             'ACTION_ID'      => $this->command->getAction(),
         ];
+
+        if ($distro) {
+            $parser = new DnsParser($this->action, $this->project, $this->environment, $distro);
+            
+            $environments['BUILD_NAME'] = $distro->getName();
+            $environments['DNS_NAME'] = $parser->parse($distro->getDns());
+        }
 
         if ($prj->getPackager() == Packager::APT()) {
             $environments['DEBIAN_FRONTEND'] = 'noninteractive';
