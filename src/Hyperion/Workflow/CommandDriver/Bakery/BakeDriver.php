@@ -103,9 +103,9 @@ class BakeDriver extends AbstractCommandDriver implements CommandDriverInterface
 
         if ($distro) {
             $parser = new DnsParser($this->action, $this->project, $this->environment, $distro);
-            
+
             $environments['BUILD_NAME'] = $distro->getName();
-            $environments['DNS_NAME'] = $parser->parse($distro->getDns());
+            $environments['DNS_NAME'] = $parser->parse($env->getDnsName());
         }
 
         if ($prj->getPackager() == Packager::APT()) {
