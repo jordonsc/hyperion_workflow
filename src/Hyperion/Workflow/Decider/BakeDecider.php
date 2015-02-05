@@ -16,10 +16,11 @@ use Hyperion\Workflow\Enum\WorkflowResult;
 
 class BakeDecider extends AbstractDecider implements DeciderInterface
 {
-    const NS_STAGE    = 'stage';
-    const NS_INSTANCE = 'instance';
-    const NS_IMAGE    = 'image';
-    const CHECK_DELAY = 5;
+    const NS_STAGE     = 'stage';
+    const NS_INSTANCE  = 'instance';
+    const NS_IMAGE     = 'image';
+    const CHECK_DELAY  = 5;
+    const BAKE_TIMEOUT = 3600;
 
     /**
      * Get the action that should be taken
@@ -356,7 +357,7 @@ class BakeDecider extends AbstractDecider implements DeciderInterface
                     'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
                 $this->getNsPrefix().self::NS_INSTANCE,
-                3600
+                self::BAKE_TIMEOUT
             );
 
             $this->setState(self::NS_STAGE, BakeStage::BAKING);

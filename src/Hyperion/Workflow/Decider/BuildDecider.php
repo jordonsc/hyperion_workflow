@@ -1,18 +1,12 @@
 <?php
 namespace Hyperion\Workflow\Decider;
 
-use Bravo3\CloudCtrl\Enum\ImageState;
-use Hyperion\Dbal\Entity\Distribution;
 use Hyperion\Dbal\Entity\Environment;
-use Hyperion\Dbal\Entity\Project;
-use Hyperion\Dbal\Enum\BakeStatus;
 use Hyperion\Dbal\Enum\DistributionStatus;
 use Hyperion\Dbal\Enum\Entity;
 use Hyperion\Dbal\Enum\InstanceState;
-use Hyperion\Framework\Utility\ConfigTrait;
 use Hyperion\Workflow\Entity\WorkflowCommand;
 use Hyperion\Workflow\Enum\ActionPhase;
-use Hyperion\Workflow\Enum\BakeStage;
 use Hyperion\Workflow\Enum\BuildStage;
 use Hyperion\Workflow\Enum\ChangeType;
 use Hyperion\Workflow\Enum\CommandType;
@@ -21,11 +15,12 @@ use Hyperion\Workflow\Exception\UnexpectedValueException;
 
 class BuildDecider extends AbstractDecider implements DeciderInterface
 {
-    const NS_STAGE    = 'stage';
-    const NS_INSTANCE = 'instance';
-    const CHECK_DELAY = 5;
-    const DEFAULT_DNS_TTL = 60;
+    const NS_STAGE                = 'stage';
+    const NS_INSTANCE             = 'instance';
+    const CHECK_DELAY             = 5;
+    const DEFAULT_DNS_TTL         = 60;
     const DEFAULT_DNS_RECORD_TYPE = 'A';
+    const BUILD_TIMEOUT           = 3600;
 
     /**
      * Get the action that should be taken
@@ -91,7 +86,7 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                 'zone'   => $env->getDnsZone(),
                 'name'   => $env->getDnsName(),
                 'type'   => self::DEFAULT_DNS_RECORD_TYPE,
-                'ttl'    => (int)$env->getDnsTtl() ? : self::DEFAULT_DNS_TTL,
+                'ttl'    => (int)$env->getDnsTtl() ?: self::DEFAULT_DNS_TTL,
                 'value'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
             ],
             $this->getNsPrefix().self::NS_INSTANCE
@@ -208,7 +203,8 @@ class BuildDecider extends AbstractDecider implements DeciderInterface
                     'address-private' => $this->getState(self::NS_INSTANCE.'.0.ip.private.ip4'),
                     'address-public'  => $this->getState(self::NS_INSTANCE.'.0.ip.public.ip4'),
                 ],
-                $this->getNsPrefix().self::NS_INSTANCE
+                $this->getNsPrefix().self::NS_INSTANCE,
+                self::BUILD_TIMEOUT
             );
 
             $this->setState(self::NS_STAGE, BuildStage::BUILDING);
